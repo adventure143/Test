@@ -3,956 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultra-Realistic Ramadan Celebration</title>
+    <title>Ramadan Celebration</title>
     <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            font-family: 'Arial', sans-serif;
-            background-color: #000;
-        }
-        
-        #canvas-container {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-        }
-        
+        body { margin: 0; overflow: hidden; }
+        #canvas-container { position: absolute; width: 100%; height: 100%; }
         .loading-screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            position: absolute; width: 100%; height: 100%;
+            background: #000; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; color: white;
             z-index: 1000;
-            color: white;
         }
-        
         .progress-bar {
-            width: 300px;
-            height: 3px;
-            background: #333;
-            margin-top: 20px;
-            overflow: hidden;
+            width: 300px; height: 3px; background: #333; margin-top: 20px;
         }
-        
         .progress-bar-fill {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(to right, #8B4513, #FFD700);
+            height: 100%; width: 0%; background: #FFD700;
             transition: width 0.3s ease;
-        }
-        
-        .scene-info {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            color: white;
-            background: rgba(0,0,0,0.5);
-            padding: 10px 15px;
-            border-radius: 5px;
-            font-size: 0.9em;
-            z-index: 100;
-            backdrop-filter: blur(5px);
         }
     </style>
 </head>
 <body>
     <div id="canvas-container"></div>
-    
     <div class="loading-screen" id="loading-screen">
         <h1>Loading Ramadan Celebration</h1>
         <div class="progress-bar">
             <div class="progress-bar-fill" id="progress-bar"></div>
         </div>
-        <p id="loading-text">Initializing 3D environment...</p>
-    </div>
-    
-    <div class="scene-info" id="scene-info">
-        <div>Ramadan Mubarak</div>
-        <div id="time-display">Evening · Crescent Moon</div>
+        <p id="loading-text">Initializing...</p>
     </div>
 
-    <!-- Import required libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/animation/CCDIKSolver.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/animation/MMDPhysics.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/FXAAShader.js"></script>
-    
     <script>
-        // Main scene setup
+        // 1. Initialize immediately
         const scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(0x0a1a2e, 0.001);
-        
-        // Camera setup
-        const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 3000);
-        camera.position.set(15, 8, 20);
-        
-        // Enhanced renderer with post-processing
-        const renderer = new THREE.WebGLRenderer({ 
-            antialias: true,
-            powerPreference: "high-performance"
-        });
-        renderer.setPixelRatio(window.devicePixelRatio);
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.shadowMap.enabled = true;
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = 0.8;
         document.getElementById('canvas-container').appendChild(renderer.domElement);
         
-        // Post-processing setup
-        const renderScene = new THREE.RenderPass(scene, camera);
-        const bloomPass = new THREE.UnrealBloomPass(
-            new THREE.Vector2(window.innerWidth, window.innerHeight),
-            1.5, 0.4, 0.85
-        );
-        bloomPass.threshold = 0;
-        bloomPass.strength = 0.5;
-        bloomPass.radius = 0.8;
-        
-        const fxaaPass = new THREE.ShaderPass(THREE.FXAAShader);
-        fxaaPass.material.uniforms['resolution'].value.set(
-            1 / (window.innerWidth * window.devicePixelRatio),
-            1 / (window.innerHeight * window.devicePixelRatio)
-        );
-        
-        const composer = new THREE.EffectComposer(renderer);
-        composer.addPass(renderScene);
-        composer.addPass(bloomPass);
-        composer.addPass(fxaaPass);
-        
-        // Orbit controls
-        const controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.05;
-        controls.minDistance = 5;
-        controls.maxDistance = 50;
-        controls.maxPolarAngle = Math.PI * 0.9;
-        
-        // Lighting setup
-        const ambientLight = new THREE.AmbientLight(0x404040, 0.3);
+        // 2. Show immediate progress
+        document.getElementById('progress-bar').style.width = '20%';
+        document.getElementById('loading-text').textContent = "Creating scene...";
+
+        // 3. Create simple elements first
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
         scene.add(ambientLight);
         
-        // Moon light (main light source)
-        const moonLight = new THREE.DirectionalLight(0xfff9e6, 0.8);
-        moonLight.position.set(-10, 10, -10);
-        moonLight.castShadow = true;
-        moonLight.shadow.mapSize.width = 4096;
-        moonLight.shadow.mapSize.height = 4096;
-        moonLight.shadow.camera.near = 0.5;
-        moonLight.shadow.camera.far = 500;
-        moonLight.shadow.camera.left = -50;
-        moonLight.shadow.camera.right = 50;
-        moonLight.shadow.camera.top = 50;
-        moonLight.shadow.camera.bottom = -50;
-        moonLight.shadow.bias = -0.001;
-        scene.add(moonLight);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(5, 10, 7);
+        scene.add(directionalLight);
         
-        // Fill light
-        const fillLight = new THREE.DirectionalLight(0x667788, 0.2);
-        fillLight.position.set(10, 5, 10);
-        scene.add(fillLight);
-        
-        // Loading manager
-        const loadingManager = new THREE.LoadingManager();
-        const textureLoader = new THREE.TextureLoader(loadingManager);
-        const gltfLoader = new THREE.GLTFLoader(loadingManager);
-        
-        // Track loading progress
-        let assetsLoaded = 0;
-        const totalAssets = 15; // Estimated number of assets to load
-        
-        loadingManager.onProgress = (url, itemsLoaded, itemsTotal) => {
-            assetsLoaded = itemsLoaded;
-            const progress = Math.min(100, Math.round((assetsLoaded / totalAssets) * 100);
-            document.getElementById('progress-bar').style.width = `${progress}%`;
-            
-            // Update loading text based on progress
-            if (progress < 30) {
-                document.getElementById('loading-text').textContent = "Loading 3D models...";
-            } else if (progress < 70) {
-                document.getElementById('loading-text').textContent = "Loading textures and materials...";
-            } else {
-                document.getElementById('loading-text').textContent = "Finalizing scene...";
-            }
-        };
-        
-        loadingManager.onLoad = () => {
-            // Hide loading screen with fade out
-            const loadingScreen = document.getElementById('loading-screen');
-            loadingScreen.style.transition = "opacity 1s ease";
-            loadingScreen.style.opacity = 0;
-            
-            setTimeout(() => {
-                loadingScreen.style.display = "none";
-            }, 1000);
-            
-            // Start animations
-            animate();
-        };
-        
-        // Create realistic moon
-        const moonTexture = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/moon_1024.jpg');
-        const moonNormalMap = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/moon_normal_1024.jpg');
-        
-        const moonGeometry = new THREE.SphereGeometry(3, 64, 64);
-        const moonMaterial = new THREE.MeshStandardMaterial({
-            map: moonTexture,
-            normalMap: moonNormalMap,
-            roughness: 0.8,
-            metalness: 0.1,
-            emissive: 0xfff9e6,
+        // Progress update
+        document.getElementById('progress-bar').style.width = '40%';
+        document.getElementById('loading-text').textContent = "Adding lights...";
+
+        // 4. Create moon (simple geometry)
+        const moonGeometry = new THREE.SphereGeometry(2, 32, 32);
+        const moonMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0xffffaa,
+            emissive: 0xffffaa,
             emissiveIntensity: 0.2
         });
         const moon = new THREE.Mesh(moonGeometry, moonMaterial);
-        moon.position.set(-30, 25, -50);
-        moon.castShadow = true;
+        moon.position.set(-10, 8, -15);
         scene.add(moon);
         
-        // Create stars
-        const starsGeometry = new THREE.BufferGeometry();
-        const starCount = 10000;
-        const positions = new Float32Array(starCount * 3);
-        const sizes = new Float32Array(starCount);
-        const colors = new Float32Array(starCount * 3);
-        
-        for (let i = 0; i < starCount; i++) {
-            const i3 = i * 3;
-            positions[i3] = (Math.random() - 0.5) * 3000;
-            positions[i3 + 1] = (Math.random() - 0.5) * 3000;
-            positions[i3 + 2] = (Math.random() - 0.5) * 3000;
-            
-            sizes[i] = Math.random() * 1.5 + 0.5;
-            
-            const colorIntensity = Math.random() * 0.5 + 0.5;
-            colors[i3] = colorIntensity;
-            colors[i3 + 1] = colorIntensity * (Math.random() * 0.2 + 0.8);
-            colors[i3 + 2] = colorIntensity * (Math.random() * 0.2 + 0.8);
-        }
-        
-        starsGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        starsGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-        starsGeometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
-        
-        const starsMaterial = new THREE.PointsMaterial({
-            size: 1,
-            vertexColors: true,
-            transparent: true,
-            opacity: 0.9,
-            sizeAttenuation: true
-        });
-        
-        const stars = new THREE.Points(starsGeometry, starsMaterial);
-        scene.add(stars);
-        
-        // Load mosque model (simplified for this example)
-        let mosque;
-        gltfLoader.load('https://threejs.org/examples/models/gltf/medieval_building/scene.gltf', (gltf) => {
-            mosque = gltf.scene;
-            mosque.scale.set(0.5, 0.5, 0.5);
-            mosque.position.set(0, 0, 0);
-            mosque.traverse((child) => {
-                if (child.isMesh) {
-                    child.castShadow = true;
-                    child.receiveShadow = true;
-                }
-            });
-            scene.add(mosque);
-        }, undefined, (error) => {
-            console.error('Error loading mosque model:', error);
-            // Fallback to basic mosque if model fails to load
-            createBasicMosque();
-        });
-        
+        // Progress update
+        document.getElementById('progress-bar').style.width = '60%';
+        document.getElementById('loading-text').textContent = "Creating environment...";
+
+        // 5. Create ground
+        const groundGeometry = new THREE.PlaneGeometry(100, 100);
+        const groundMaterial = new THREE.MeshStandardMaterial({ color: 0x2d5a3d });
+        const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+        ground.rotation.x = -Math.PI / 2;
+        scene.add(ground);
+
+        // 6. Simple mosque (basic geometry)
         const createBasicMosque = () => {
             const group = new THREE.Group();
             
             // Base
-            const baseGeometry = new THREE.BoxGeometry(10, 0.5, 10);
-            const baseMaterial = new THREE.MeshStandardMaterial({ 
-                color: 0x8B4513,
-                roughness: 0.7,
-                metalness: 0.1
-            });
-            const base = new THREE.Mesh(baseGeometry, baseMaterial);
-            base.position.y = -0.25;
-            base.receiveShadow = true;
-            base.castShadow = true;
+            const base = new THREE.Mesh(
+                new THREE.BoxGeometry(10, 1, 10),
+                new THREE.MeshStandardMaterial({ color: 0x8B4513 })
+            );
+            base.position.y = -0.5;
             group.add(base);
             
-            // Main building
-            const buildingGeometry = new THREE.BoxGeometry(8, 6, 8);
-            const buildingMaterial = new THREE.MeshStandardMaterial({ 
-                color: 0xE6D5B8,
-                roughness: 0.6,
-                metalness: 0.05
-            });
-            const building = new THREE.Mesh(buildingGeometry, buildingMaterial);
-            building.position.y = 3;
-            building.castShadow = true;
-            building.receiveShadow = true;
-            group.add(building);
+            // Main structure
+            const walls = new THREE.Mesh(
+                new THREE.BoxGeometry(8, 5, 8),
+                new THREE.MeshStandardMaterial({ color: 0xE6D5B8 })
+            );
+            walls.position.y = 2.5;
+            group.add(walls);
             
             // Dome
-            const domeGeometry = new THREE.SphereGeometry(3, 64, 64, 0, Math.PI * 2, 0, Math.PI / 2);
-            const domeMaterial = new THREE.MeshStandardMaterial({ 
-                color: 0xF0E68C,
-                roughness: 0.4,
-                metalness: 0.2,
-                envMapIntensity: 0.2
-            });
-            const dome = new THREE.Mesh(domeGeometry, domeMaterial);
-            dome.position.y = 9.2;
+            const dome = new THREE.Mesh(
+                new THREE.SphereGeometry(3, 32, 32, 0, Math.PI * 2, 0, Math.PI/2),
+                new THREE.MeshStandardMaterial({ color: 0xF0E68C })
+            );
+            dome.position.y = 7.5;
             dome.rotation.x = Math.PI;
-            dome.castShadow = true;
             group.add(dome);
-            
-            // Dome finial
-            const finialGeometry = new THREE.ConeGeometry(0.5, 2, 16);
-            const finialMaterial = new THREE.MeshStandardMaterial({ 
-                color: 0xFFD700,
-                metalness: 0.9,
-                roughness: 0.3
-            });
-            const finial = new THREE.Mesh(finialGeometry, finialMaterial);
-            finial.position.y = 11.7;
-            finial.castShadow = true;
-            group.add(finial);
             
             // Minarets
             for (let i = 0; i < 4; i++) {
-                const angle = i * Math.PI / 2;
-                const x = Math.cos(angle) * 7.5;
-                const z = Math.sin(angle) * 7.5;
-                
-                // Minaret base
-                const minaretBaseGeometry = new THREE.CylinderGeometry(0.8, 1, 1.5, 16);
-                const minaretBase = new THREE.Mesh(minaretBaseGeometry, buildingMaterial);
-                minaretBase.position.set(x, 0.75, z);
-                minaretBase.castShadow = true;
-                group.add(minaretBase);
-                
-                // Minaret shaft
-                const minaretShaftGeometry = new THREE.CylinderGeometry(0.6, 0.8, 12, 16);
-                const minaretShaft = new THREE.Mesh(minaretShaftGeometry, buildingMaterial);
-                minaretShaft.position.set(x, 7.5, z);
-                minaretShaft.castShadow = true;
-                group.add(minaretShaft);
-                
-                // Minaret balcony
-                const balconyGeometry = new THREE.TorusGeometry(0.8, 0.3, 8, 32, Math.PI * 2);
-                const balcony = new THREE.Mesh(balconyGeometry, new THREE.MeshStandardMaterial({ color: 0xC19A6B }));
-                balcony.position.set(x, 13.5, z);
-                balcony.rotation.x = Math.PI / 2;
-                balcony.castShadow = true;
-                group.add(balcony);
-                
-                // Minaret spire
-                const spireGeometry = new THREE.ConeGeometry(0.6, 3, 16);
-                const spire = new THREE.Mesh(spireGeometry, finialMaterial);
-                spire.position.set(x, 15.5, z);
-                spire.castShadow = true;
-                group.add(spire);
+                const angle = i * Math.PI/2;
+                const minaret = new THREE.Mesh(
+                    new THREE.CylinderGeometry(0.5, 0.7, 10, 8),
+                    new THREE.MeshStandardMaterial({ color: 0xE6D5B8 })
+                );
+                minaret.position.set(
+                    Math.cos(angle) * 7,
+                    5,
+                    Math.sin(angle) * 7
+                );
+                group.add(minaret);
             }
             
-            mosque = group;
-            scene.add(mosque);
-        };
-        
-        // Create realistic ground with texture
-        const groundGeometry = new THREE.CircleGeometry(150, 64);
-        const groundTexture = textureLoader.load('https://threejs.org/examples/textures/terrain/grasslight-big.jpg');
-        groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
-        groundTexture.repeat.set(20, 20);
-        groundTexture.anisotropy = 16;
-        
-        const groundMaterial = new THREE.MeshStandardMaterial({ 
-            map: groundTexture,
-            color: 0x2d5a3d,
-            roughness: 0.8,
-            metalness: 0.1
-        });
-        
-        const ground = new THREE.Mesh(groundGeometry, groundMaterial);
-        ground.rotation.x = -Math.PI / 2;
-        ground.receiveShadow = true;
-        scene.add(ground);
-        
-        // Create reflective water pool
-        const waterGeometry = new THREE.CircleGeometry(8, 64);
-        const water = new THREE.Water(
-            waterGeometry,
-            {
-                textureWidth: 512,
-                textureHeight: 512,
-                waterNormals: textureLoader.load('https://threejs.org/examples/textures/waternormals.jpg', function(texture) {
-                    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-                }),
-                sunDirection: moonLight.position.clone().normalize(),
-                sunColor: 0xffffff,
-                waterColor: 0x001e0f,
-                distortionScale: 3.0,
-                fog: scene.fog !== undefined
-            }
-        );
-        water.rotation.x = -Math.PI / 2;
-        water.position.y = 0.1;
-        scene.add(water);
-        
-        // Create lanterns
-        const lanterns = [];
-        const lanternCount = 16;
-        
-        const createLantern = (x, y, z) => {
-            const group = new THREE.Group();
-            
-            // Lantern glass body
-            const lanternGeometry = new THREE.CylinderGeometry(0.6, 0.6, 1.5, 16);
-            const lanternMaterial = new THREE.MeshPhysicalMaterial({ 
-                color: 0xFFD700,
-                transmission: 0.7,
-                roughness: 0.1,
-                metalness: 0.9,
-                clearcoat: 0.5,
-                clearcoatRoughness: 0.1,
-                ior: 1.5,
-                thickness: 0.1,
-                envMapIntensity: 0.5,
-                transparent: true,
-                opacity: 0.9
-            });
-            const lantern = new THREE.Mesh(lanternGeometry, lanternMaterial);
-            lantern.position.y = 0.75;
-            lantern.castShadow = true;
-            lantern.receiveShadow = true;
-            group.add(lantern);
-            
-            // Lantern frame
-            const frameGeometry = new THREE.CylinderGeometry(0.62, 0.62, 1.52, 16);
-            const frame = new THREE.LineSegments(
-                new THREE.EdgesGeometry(frameGeometry),
-                new THREE.LineBasicMaterial({ color: 0x8B4513, linewidth: 2 })
-            );
-            frame.position.y = 0.75;
-            group.add(frame);
-            
-            // Light inside lantern
-            const lanternLight = new THREE.PointLight(0xFFA500, 3, 5, 2);
-            lanternLight.position.set(0, 0.75, 0);
-            group.add(lanternLight);
-            
-            // Top metal cap
-            const topGeometry = new THREE.CylinderGeometry(0.65, 0.65, 0.3, 16);
-            const topMaterial = new THREE.MeshStandardMaterial({ 
-                color: 0x8B4513,
-                roughness: 0.3,
-                metalness: 0.9
-            });
-            const top = new THREE.Mesh(topGeometry, topMaterial);
-            top.position.y = 1.5;
-            group.add(top);
-            
-            // Decorative top
-            const decorGeometry = new THREE.TorusGeometry(0.5, 0.08, 8, 32);
-            const decor = new THREE.Mesh(decorGeometry, topMaterial);
-            decor.position.y = 1.65;
-            group.add(decor);
-            
-            // Hook
-            const hookGeometry = new THREE.TorusGeometry(0.15, 0.03, 8, 32);
-            const hook = new THREE.Mesh(hookGeometry, topMaterial);
-            hook.position.y = 2.0;
-            hook.rotation.x = Math.PI / 2;
-            group.add(hook);
-            
-            // Chain
-            const chainLength = 4;
-            const chainLinkGeometry = new THREE.TorusGeometry(0.05, 0.03, 8, 16);
-            const chainLinkMaterial = new THREE.MeshStandardMaterial({ 
-                color: 0x8B4513,
-                roughness: 0.3,
-                metalness: 0.9
-            });
-            
-            for (let i = 0; i < chainLength * 5; i++) {
-                const chainLink = new THREE.Mesh(chainLinkGeometry, chainLinkMaterial);
-                chainLink.position.y = 2.0 + i * 0.12;
-                chainLink.rotation.x = Math.PI / 2;
-                chainLink.rotation.z = i % 2 ? Math.PI / 2 : 0;
-                group.add(chainLink);
-            }
-            
-            group.position.set(x, y, z);
             return group;
         };
+
+        const mosque = createBasicMosque();
+        scene.add(mosque);
         
-        // Position lanterns around the mosque
-        for (let i = 0; i < lanternCount; i++) {
-            const angle = (i / lanternCount) * Math.PI * 2;
-            const radius = 12 + Math.random() * 3;
-            const x = Math.cos(angle) * radius;
-            const z = Math.sin(angle) * radius;
-            const y = 6 + Math.random() * 2;
-            
-            const lantern = createLantern(x, y, z);
-            scene.add(lantern);
-            lanterns.push(lantern);
-        }
-        
-        // Human characters (simplified - in a real app you'd use proper 3D models)
-        const humans = [];
-        const humanCount = 12;
-        
-        const createHuman = (x, z, outfitColor) => {
+        // Progress update
+        document.getElementById('progress-bar').style.width = '80%';
+        document.getElementById('loading-text').textContent = "Finalizing...";
+
+        // 7. Simple humans (cubes for now)
+        const createSimpleHuman = (x, z) => {
             const group = new THREE.Group();
             
             // Body
-            const bodyGeometry = new THREE.CylinderGeometry(0.3, 0.3, 1, 8);
-            const bodyMaterial = new THREE.MeshStandardMaterial({ 
-                color: outfitColor || 0x4682B4,
-                roughness: 0.7
-            });
-            const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+            const body = new THREE.Mesh(
+                new THREE.BoxGeometry(0.5, 1, 0.3),
+                new THREE.MeshStandardMaterial({ color: 0x4682B4 })
+            );
             body.position.y = 0.5;
-            body.castShadow = true;
             group.add(body);
             
             // Head
-            const headGeometry = new THREE.SphereGeometry(0.25, 16, 16);
-            const headMaterial = new THREE.MeshStandardMaterial({ 
-                color: 0xF5DEB3,
-                roughness: 0.6
-            });
-            const head = new THREE.Mesh(headGeometry, headMaterial);
-            head.position.y = 1.25;
-            head.castShadow = true;
+            const head = new THREE.Mesh(
+                new THREE.SphereGeometry(0.2),
+                new THREE.MeshStandardMaterial({ color: 0xF5DEB3 })
+            );
+            head.position.y = 1.2;
             group.add(head);
             
-            // Arms
-            const armGeometry = new THREE.CylinderGeometry(0.08, 0.08, 0.8, 8);
-            
-            const leftArm = new THREE.Mesh(armGeometry, bodyMaterial);
-            leftArm.position.set(-0.35, 0.8, 0);
-            leftArm.rotation.z = Math.PI / 2;
-            leftArm.castShadow = true;
-            group.add(leftArm);
-            
-            const rightArm = new THREE.Mesh(armGeometry, bodyMaterial);
-            rightArm.position.set(0.35, 0.8, 0);
-            rightArm.rotation.z = -Math.PI / 2;
-            rightArm.castShadow = true;
-            group.add(rightArm);
-            
-            // Legs
-            const legGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.8, 8);
-            const legMaterial = new THREE.MeshStandardMaterial({ 
-                color: 0x2F4F4F,
-                roughness: 0.7
-            });
-            
-            const leftLeg = new THREE.Mesh(legGeometry, legMaterial);
-            leftLeg.position.set(-0.15, -0.4, 0);
-            leftLeg.castShadow = true;
-            group.add(leftLeg);
-            
-            const rightLeg = new THREE.Mesh(legGeometry, legMaterial);
-            rightLeg.position.set(0.15, -0.4, 0);
-            rightLeg.castShadow = true;
-            group.add(rightLeg);
-            
-            // Animation properties
-            group.userData = {
-                speed: 0.02 + Math.random() * 0.03,
-                armSwing: Math.random() * Math.PI,
-                legSwing: Math.random() * Math.PI,
-                targetPosition: new THREE.Vector3(
-                    x + (Math.random() - 0.5) * 10,
-                    0,
-                    z + (Math.random() - 0.5) * 10
-                ),
-                idleTime: 0,
-                state: 'walking' // walking, praying, talking
-            };
-            
             group.position.set(x, 0, z);
-            group.rotation.y = Math.random() * Math.PI * 2;
-            
             return group;
         };
-        
-        // Create humans in random positions
-        const humanOutfits = [0x4682B4, 0x8B4513, 0x2E8B57, 0x800000, 0x4B0082];
-        for (let i = 0; i < humanCount; i++) {
-            const angle = Math.random() * Math.PI * 2;
-            const distance = 5 + Math.random() * 10;
-            const x = Math.cos(angle) * distance;
-            const z = Math.sin(angle) * distance;
-            
-            const human = createHuman(x, z, humanOutfits[Math.floor(Math.random() * humanOutfits.length)]);
+
+        // Add some humans
+        for (let i = 0; i < 5; i++) {
+            const human = createSimpleHuman(-5 + i*2, 5);
             scene.add(human);
-            humans.push(human);
         }
+
+        // 8. Position camera
+        camera.position.set(10, 10, 15);
+        camera.lookAt(0, 0, 0);
+
+        // 9. Complete loading
+        document.getElementById('progress-bar').style.width = '100%';
+        document.getElementById('loading-text').textContent = "Ready!";
         
-        // Date palms
-        const palms = [];
-        const palmCount = 10;
-        
-        const createPalmTree = (x, z) => {
-            const group = new THREE.Group();
-            
-            // Trunk
-            const trunkGeometry = new THREE.CylinderGeometry(0.4, 0.5, 8, 8);
-            const trunkMaterial = new THREE.MeshStandardMaterial({ 
-                color: 0x8B4513,
-                roughness: 0.8,
-                metalness: 0.1
-            });
-            const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
-            trunk.position.y = 4;
-            trunk.castShadow = true;
-            group.add(trunk);
-            
-            // Leaves
-            const leafCount = 12;
-            for (let i = 0; i < leafCount; i++) {
-                const angle = (i / leafCount) * Math.PI * 2;
-                const leafLength = 3 + Math.random() * 1;
-                const leafWidth = 0.8 + Math.random() * 0.3;
-                const leafAngle = Math.random() * Math.PI / 4;
-                
-                const leafShape = new THREE.Shape();
-                leafShape.moveTo(0, 0);
-                leafShape.lineTo(-leafWidth/2, leafLength * 0.2);
-                leafShape.lineTo(-leafWidth/4, leafLength * 0.8);
-                leafShape.lineTo(0, leafLength);
-                leafShape.lineTo(leafWidth/4, leafLength * 0.8);
-                leafShape.lineTo(leafWidth/2, leafLength * 0.2);
-                leafShape.lineTo(0, 0);
-                
-                const leafGeometry = new THREE.ExtrudeGeometry(leafShape, {
-                    steps: 1,
-                    depth: 0.02,
-                    bevelEnabled: false
-                });
-                
-                const leafMaterial = new THREE.MeshStandardMaterial({ 
-                    color: 0x2d5a3d,
-                    roughness: 0.9,
-                    metalness: 0
-                });
-                
-                const leaf = new THREE.Mesh(leafGeometry, leafMaterial);
-                leaf.position.y = 8;
-                leaf.rotation.x = -Math.PI/4 + Math.random() * Math.PI/8;
-                leaf.rotation.z = angle;
-                leaf.rotation.y = leafAngle;
-                leaf.castShadow = true;
-                group.add(leaf);
-            }
-            
-            // Date clusters
-            const dateClusterGeometry = new THREE.SphereGeometry(0.5, 8, 8);
-            const dateClusterMaterial = new THREE.MeshStandardMaterial({ 
-                color: 0x8B0000,
-                roughness: 0.7,
-                metalness: 0.1
-            });
-            
-            for (let i = 0; i < 4; i++) {
-                const angle = (i / 4) * Math.PI * 2;
-                const dateCluster = new THREE.Mesh(dateClusterGeometry, dateClusterMaterial);
-                dateCluster.position.set(
-                    Math.cos(angle) * 0.8,
-                    6 - i * 0.5,
-                    Math.sin(angle) * 0.8
-                );
-                dateCluster.castShadow = true;
-                group.add(dateCluster);
-            }
-            
-            group.position.set(x, 0, z);
-            return group;
-        };
-        
-        // Position palm trees around the scene
-        for (let i = 0; i < palmCount; i++) {
-            const angle = (i / palmCount) * Math.PI * 2;
-            const distance = 15 + Math.random() * 5;
-            const x = Math.cos(angle) * distance;
-            const z = Math.sin(angle) * distance;
-            
-            const palm = createPalmTree(x, z);
-            scene.add(palm);
-            palms.push(palm);
-        }
-        
-        // Decorative elements
-        const createPrayerMat = (x, z, rotation) => {
-            const group = new THREE.Group();
-            
-            // Mat base
-            const matGeometry = new THREE.PlaneGeometry(1.5, 0.8);
-            const matMaterial = new THREE.MeshStandardMaterial({ 
-                color: 0x006400,
-                roughness: 0.7,
-                side: THREE.DoubleSide
-            });
-            const mat = new THREE.Mesh(matGeometry, matMaterial);
-            mat.rotation.x = -Math.PI / 2;
-            mat.receiveShadow = true;
-            group.add(mat);
-            
-            // Pattern
-            const patternGeometry = new THREE.PlaneGeometry(1.4, 0.7);
-            const patternMaterial = new THREE.MeshStandardMaterial({ 
-                color: 0x008000,
-                roughness: 0.6,
-                transparent: true,
-                opacity: 0.7,
-                side: THREE.DoubleSide
-            });
-            const pattern = new THREE.Mesh(patternGeometry, patternMaterial);
-            pattern.rotation.x = -Math.PI / 2;
-            pattern.position.y = 0.01;
-            group.add(pattern);
-            
-            group.position.set(x, 0.01, z);
-            group.rotation.y = rotation || 0;
-            
-            return group;
-        };
-        
-        // Add prayer mats around the mosque
-        for (let i = 0; i < 8; i++) {
-            const angle = (i / 8) * Math.PI * 2;
-            const distance = 5 + Math.random() * 2;
-            const x = Math.cos(angle) * distance;
-            const z = Math.sin(angle) * distance;
-            
-            const mat = createPrayerMat(x, z, angle + Math.PI);
-            scene.add(mat);
-        }
-        
-        // Add food tables for iftar
-        const createFoodTable = (x, z, rotation) => {
-            const group = new THREE.Group();
-            
-            // Table
-            const tableGeometry = new THREE.BoxGeometry(2, 0.5, 1);
-            const tableMaterial = new THREE.MeshStandardMaterial({ 
-                color: 0x8B4513,
-                roughness: 0.6
-            });
-            const table = new THREE.Mesh(tableGeometry, tableMaterial);
-            table.position.y = 0.25;
-            table.castShadow = true;
-            table.receiveShadow = true;
-            group.add(table);
-            
-            // Table legs
-            const legGeometry = new THREE.CylinderGeometry(0.05, 0.05, 0.7, 8);
-            
-            for (let i = 0; i < 4; i++) {
-                const legX = i % 2 ? 0.9 : -0.9;
-                const legZ = i < 2 ? 0.4 : -0.4;
-                const leg = new THREE.Mesh(legGeometry, tableMaterial);
-                leg.position.set(legX, -0.35, legZ);
-                leg.castShadow = true;
-                group.add(leg);
-            }
-            
-            // Food items
-            const foodItems = [
-                { color: 0x8B0000, size: [0.3, 0.1, 0.3], pos: [-0.6, 0.5, 0] }, // dates
-                { color: 0xFFD700, size: [0.4, 0.2, 0.4], pos: [0, 0.5, 0] }, // bread
-                { color: 0xFFFFFF, size: [0.3, 0.3, 0.3], pos: [0.6, 0.5, 0] } // soup bowl
-            ];
-            
-            foodItems.forEach(item => {
-                const foodGeometry = new THREE.BoxGeometry(...item.size);
-                const foodMaterial = new THREE.MeshStandardMaterial({ color: item.color });
-                const food = new THREE.Mesh(foodGeometry, foodMaterial);
-                food.position.set(...item.pos);
-                food.castShadow = true;
-                group.add(food);
-            });
-            
-            group.position.set(x, 0, z);
-            group.rotation.y = rotation || 0;
-            
-            return group;
-        };
-        
-        // Add food tables
-        for (let i = 0; i < 4; i++) {
-            const angle = (i / 4) * Math.PI * 2;
-            const distance = 8 + Math.random() * 2;
-            const x = Math.cos(angle) * distance;
-            const z = Math.sin(angle) * distance;
-            
-            const table = createFoodTable(x, z, angle + Math.PI/2);
-            scene.add(table);
-        }
-        
+        setTimeout(() => {
+            document.getElementById('loading-screen').style.opacity = 0;
+            setTimeout(() => {
+                document.getElementById('loading-screen').style.display = 'none';
+            }, 500);
+        }, 500);
+
         // Animation loop
-        const clock = new THREE.Clock();
-        
-        const animate = () => {
+        function animate() {
             requestAnimationFrame(animate);
-            
-            const delta = clock.getDelta();
-            const time = clock.getElapsedTime();
-            
-            // Update water
-            if (water.material.uniforms) {
-                water.material.uniforms.time.value += delta * 0.5;
-            }
-            
-            // Rotate moon slowly
-            moon.rotation.y += delta * 0.05;
-            
-            // Make lanterns sway gently
-            lanterns.forEach((lantern, index) => {
-                const swayAmount = 0.1;
-                const swaySpeed = 0.5 + index * 0.02;
-                lantern.position.x += Math.sin(time * swaySpeed) * swayAmount * delta;
-                lantern.position.z += Math.cos(time * swaySpeed * 1.3) * swayAmount * delta;
-                
-                // Make light flicker slightly
-                if (lantern.children[2] && lantern.children[2].isPointLight) {
-                    lantern.children[2].intensity = 2 + Math.sin(time * 5 + index) * 0.5;
-                }
-            });
-            
-            // Animate humans
-            humans.forEach(human => {
-                const { speed, armSwing, legSwing, targetPosition, idleTime, state } = human.userData;
-                
-                if (state === 'walking') {
-                    // Move toward target
-                    const direction = new THREE.Vector3()
-                        .subVectors(targetPosition, human.position)
-                        .normalize();
-                    
-                    human.position.add(direction.multiplyScalar(speed));
-                    human.rotation.y = Math.atan2(direction.x, direction.z);
-                    
-                    // Swing arms and legs
-                    human.userData.armSwing += delta * 5;
-                    human.userData.legSwing += delta * 5;
-                    
-                    human.children[3].rotation.x = Math.sin(armSwing) * 0.5; // left arm
-                    human.children[4].rotation.x = Math.sin(armSwing + Math.PI) * 0.5; // right arm
-                    human.children[5].rotation.x = Math.sin(legSwing + Math.PI) * 0.3; // left leg
-                    human.children[6].rotation.x = Math.sin(legSwing) * 0.3; // right leg
-                    
-                    // Check if reached target
-                    if (human.position.distanceTo(targetPosition) < 0.5) {
-                        human.userData.state = Math.random() > 0.7 ? 'praying' : 'talking';
-                        human.userData.idleTime = 2 + Math.random() * 5;
-                        
-                        if (human.userData.state === 'praying') {
-                            // Face mosque
-                            const directionToMosque = new THREE.Vector3()
-                                .subVectors(new THREE.Vector3(0, 0, 0), human.position)
-                                .normalize();
-                            human.rotation.y = Math.atan2(directionToMosque.x, directionToMosque.z);
-                        }
-                    }
-                } 
-                else if (state === 'praying') {
-                    // Prayer animation
-                    human.userData.idleTime -= delta;
-                    human.children[3].rotation.x = -Math.PI/2; // arms raised
-                    human.children[4].rotation.x = -Math.PI/2;
-                    
-                    // Slight bowing motion
-                    human.children[0].rotation.z = Math.sin(time * 2) * 0.1;
-                    
-                    if (human.userData.idleTime <= 0) {
-                        human.userData.state = 'walking';
-                        human.userData.targetPosition = new THREE.Vector3(
-                            human.position.x + (Math.random() - 0.5) * 10,
-                            0,
-                            human.position.z + (Math.random() - 0.5) * 10
-                        );
-                    }
-                } 
-                else if (state === 'talking') {
-                    // Talking/idle animation
-                    human.userData.idleTime -= delta;
-                    human.userData.armSwing += delta * 3;
-                    
-                    // Gentle arm gestures
-                    human.children[3].rotation.x = Math.PI/4 + Math.sin(armSwing) * 0.2;
-                    human.children[4].rotation.x = Math.PI/4 + Math.sin(armSwing + Math.PI/2) * 0.2;
-                    
-                    if (human.userData.idleTime <= 0) {
-                        human.userData.state = 'walking';
-                        human.userData.targetPosition = new THREE.Vector3(
-                            human.position.x + (Math.random() - 0.5) * 10,
-                            0,
-                            human.position.z + (Math.random() - 0.5) * 10
-                        );
-                    }
-                }
-            });
-            
-            // Sway palm trees
-            palms.forEach(palm => {
-                palm.children.forEach(child => {
-                    if (child.geometry && child.geometry.type === 'ExtrudeGeometry') {
-                        // Sway leaves
-                        child.rotation.x = -Math.PI/4 + Math.sin(time * 0.3) * 0.1;
-                    }
-                });
-            });
-            
-            // Update time display
-            updateTimeDisplay(time);
-            
-            // Update controls
-            controls.update();
-            
-            // Render with post-processing
-            composer.render();
-        };
+            moon.rotation.y += 0.005;
+            renderer.render(scene, camera);
+        }
         
-        // Update time of day display
-        const updateTimeDisplay = (time) => {
-            const hour = (Math.floor(time / 6) % 24);
-            const minute = Math.floor((time % 6) * 10);
-            const period = hour >= 12 ? 'PM' : 'AM';
-            const displayHour = hour % 12 || 12;
-            
-            document.getElementById('time-display').textContent = 
-                `${displayHour}:${minute.toString().padStart(2, '0')} ${period} · Crescent Moon`;
-        };
-        
-        // Handle window resize
+        animate();
+
+        // Handle resize
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
-            composer.setSize(window.innerWidth, window.innerHeight);
-            fxaaPass.material.uniforms['resolution'].value.set(
-                1 / (window.innerWidth * window.devicePixelRatio),
-                1 / (window.innerHeight * window.devicePixelRatio)
-            );
         });
     </script>
 </body>
