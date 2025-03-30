@@ -20,11 +20,12 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient(45deg, #0061ff, #60efff);
+            background: #0061ff;
             perspective: 1000px;
             overflow: hidden;
         }
 
+        /* Floating bubbles background */
         .floating-bubbles {
             position: absolute;
             width: 100%;
@@ -188,7 +189,7 @@
             transform: translateY(-30px);
             font-size: 14px;
             color: #fff;
-            background: linear-gradient(45deg, #0061ff, #60efff);
+            background: #0061ff;
             padding: 2px 10px;
             border-radius: 20px;
         }
@@ -210,8 +211,8 @@
         }
         
         button:hover {
-            background: #0061ff;
-            color: #fff;
+            background: rgba(255, 255, 255, 0.8);
+            color: #0061ff;
             transform: translateY(-5px);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
@@ -266,10 +267,11 @@
             font-size: 18px;
         }
 
+        /* Special 3D Social Media Icons */
         .social-links {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 25px;
             margin-top: 20px;
             z-index: 2;
         }
@@ -278,69 +280,84 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
             color: #fff;
             text-decoration: none;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             position: relative;
-            overflow: hidden;
             transform-style: preserve-3d;
             transform: perspective(500px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
 
         .social-link::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, #0061ff, #60efff);
-            transform: translateZ(-1px);
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: translateZ(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .social-link::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 50%);
+            border-radius: 50%;
             opacity: 0;
             transition: all 0.3s ease;
         }
 
         .social-link i {
             position: relative;
+            font-size: 24px;
             transition: all 0.3s ease;
+            z-index: 2;
         }
 
         .social-link:hover {
-            transform: translateY(-5px) scale(1.1) rotateY(15deg);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transform: perspective(500px) rotateY(15deg) translateY(-10px) scale(1.1);
         }
 
         .social-link:hover::before {
-            opacity: 1;
+            transform: translateZ(-20px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .social-link:hover::after {
+            opacity: 0.6;
         }
 
         .social-link:hover i {
             transform: scale(1.2);
         }
 
-        .telegram-btn {
-            background: #0088cc;
-        }
-
         .whatsapp-btn {
             background: #25D366;
+            animation: pulse-whatsapp 2s infinite;
         }
 
-        .facebook-btn {
-            background: #3b5998;
+        .telegram-btn {
+            background: #0088cc;
+            animation: pulse-telegram 2s infinite 0.5s;
         }
 
-        .instagram-btn {
-            background: #E1306C;
+        @keyframes pulse-whatsapp {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
         }
 
-        .twitter-btn {
-            background: #1DA1F2;
+        @keyframes pulse-telegram {
+            0% { box-shadow: 0 0 0 0 rgba(0, 136, 204, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(0, 136, 204, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 136, 204, 0); }
         }
     </style>
 </head>
@@ -368,7 +385,7 @@
         </div>
         <div class="contact-card back">
             <h2>Thank You!</h2>
-            <div class="success-message">Your message has been sent successfully.</div>
+            <div class="success-message">Your message has been sent to kskannancontact@gmail.com</div>
             
             <div class="contact-info">
                 <a href="https://wa.me/9655636477" class="contact-item" target="_blank">
@@ -382,20 +399,11 @@
             </div>
             
             <div class="social-links">
-                <a href="#" class="social-link whatsapp-btn" title="WhatsApp">
+                <a href="https://wa.me/9655636477" class="social-link whatsapp-btn" title="WhatsApp" target="_blank">
                     <i class="fab fa-whatsapp"></i>
                 </a>
-                <a href="https://telegram.me/ks_admin_68" class="social-link telegram-btn" title="Telegram">
+                <a href="https://telegram.me/ks_admin_68" class="social-link telegram-btn" title="Telegram" target="_blank">
                     <i class="fab fa-telegram-plane"></i>
-                </a>
-                <a href="#" class="social-link facebook-btn" title="Facebook">
-                    <i class="fab fa-facebook-f"></i>
-                </a>
-                <a href="#" class="social-link instagram-btn" title="Instagram">
-                    <i class="fab fa-instagram"></i>
-                </a>
-                <a href="#" class="social-link twitter-btn" title="Twitter">
-                    <i class="fab fa-twitter"></i>
                 </a>
             </div>
             
@@ -478,12 +486,28 @@
         contactForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
+            // Get form data
+            const formData = new FormData(contactForm);
+            const data = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                message: formData.get('message')
+            };
+            
+            // Here you would normally send the data to your server
+            // For demo purposes, we'll just show the success message
+            
             // Add submission animation
             contactContainer.style.transform = 'rotateY(90deg) scale(0.9)';
             
             setTimeout(() => {
                 contactContainer.style.transform = 'rotateY(180deg) scale(1)';
             }, 400);
+            
+            // In a real implementation, you would:
+            // 1. Send the data to your server (e.g., using fetch API)
+            // 2. Your server would then email it to kskannancontact@gmail.com
+            // 3. Handle success/error responses appropriately
         });
         
         // Return button with animation
