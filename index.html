@@ -20,26 +20,62 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: #0061ff;
+            background: #111;
             perspective: 1000px;
             overflow: hidden;
         }
 
-        /* Floating bubbles background */
-        .floating-bubbles {
+        /* 3D Animated Background */
+        .bg-3d {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            transform-style: preserve-3d;
+            animation: bgRotate 20s infinite linear;
+        }
+
+        @keyframes bgRotate {
+            0% { transform: rotateX(0deg) rotateY(0deg); }
+            25% { transform: rotateX(5deg) rotateY(5deg); }
+            50% { transform: rotateX(0deg) rotateY(10deg); }
+            75% { transform: rotateX(-5deg) rotateY(5deg); }
+            100% { transform: rotateX(0deg) rotateY(0deg); }
+        }
+
+        .bg-grid {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: 
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: gridMove 20s linear infinite;
+            transform: translateZ(-100px);
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(-50%, -50%) translateZ(-100px); }
+            100% { transform: translate(-50%, -50%) translateX(-40px) translateY(-40px) translateZ(-100px); }
+        }
+
+        /* Floating particles */
+        .particles {
             position: absolute;
             width: 100%;
             height: 100%;
             z-index: -1;
-            pointer-events: none;
         }
 
-        .bubble {
+        .particle {
             position: absolute;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.5);
             border-radius: 50%;
             animation: float 15s infinite linear;
-            pointer-events: none;
         }
 
         @keyframes float {
@@ -47,9 +83,7 @@
                 transform: translateY(0) rotate(0deg) translateZ(0);
                 opacity: 0;
             }
-            10% {
-                opacity: 0.5;
-            }
+            10% { opacity: 0.5; }
             50% {
                 transform: translateY(-100px) rotate(180deg) translateZ(50px);
                 opacity: 0.8;
@@ -59,7 +93,8 @@
                 opacity: 0;
             }
         }
-        
+
+        /* Contact Card */
         .contact-container {
             position: relative;
             width: 400px;
@@ -78,8 +113,8 @@
             backface-visibility: hidden;
             border-radius: 20px;
             padding: 30px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
             box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
@@ -96,27 +131,17 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            background: radial-gradient(circle, rgba(0,97,255,0.1) 0%, rgba(0,97,255,0) 70%);
             animation: bubbleBg 15s infinite linear;
             z-index: -1;
         }
 
         @keyframes bubbleBg {
-            0% {
-                transform: translate(0, 0);
-            }
-            25% {
-                transform: translate(20px, 20px);
-            }
-            50% {
-                transform: translate(0, 40px);
-            }
-            75% {
-                transform: translate(-20px, 20px);
-            }
-            100% {
-                transform: translate(0, 0);
-            }
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(20px, 20px); }
+            50% { transform: translate(0, 40px); }
+            75% { transform: translate(-20px, 20px); }
+            100% { transform: translate(0, 0); }
         }
         
         .contact-card.front {
@@ -135,7 +160,7 @@
             font-size: 28px;
             margin-bottom: 30px;
             text-align: center;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
         
         .input-group {
@@ -148,21 +173,20 @@
         .input-group textarea {
             width: 100%;
             padding: 15px 20px;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
             border: none;
             outline: none;
             border-radius: 35px;
             font-size: 16px;
             color: #fff;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
             z-index: 2;
-            position: relative;
         }
 
         .input-group input:focus,
         .input-group textarea:focus {
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 20px rgba(0, 97, 255, 0.4);
             transform: translateY(-3px);
         }
         
@@ -197,44 +221,60 @@
         button {
             width: 100%;
             padding: 15px;
-            background: #fff;
+            background: #0061ff;
             border: none;
             outline: none;
             border-radius: 35px;
-            color: #0061ff;
+            color: #fff;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 97, 255, 0.4);
             z-index: 2;
+            position: relative;
+            overflow: hidden;
         }
-        
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
         button:hover {
-            background: rgba(255, 255, 255, 0.8);
-            color: #0061ff;
+            background: #0052d4;
             transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 97, 255, 0.6);
+        }
+
+        button:hover::before {
+            left: 100%;
         }
         
         .success-message {
             color: #fff;
             font-size: 18px;
             margin-bottom: 30px;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
             z-index: 2;
         }
         
         .return-btn {
             background: transparent;
-            border: 2px solid #fff;
+            border: 2px solid #0061ff;
             color: #fff;
             margin-bottom: 30px;
         }
         
         .return-btn:hover {
-            background: #fff;
-            color: #0061ff;
+            background: #0061ff;
+            color: #fff;
         }
 
         .contact-info {
@@ -251,15 +291,17 @@
             color: #fff;
             text-decoration: none;
             padding: 10px 15px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 97, 255, 0.1);
             border-radius: 30px;
             transition: all 0.3s ease;
             backdrop-filter: blur(5px);
+            border: 1px solid rgba(0, 97, 255, 0.2);
         }
 
         .contact-item:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(0, 97, 255, 0.2);
             transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 97, 255, 0.2);
         }
 
         .contact-item i {
@@ -267,32 +309,41 @@
             font-size: 18px;
         }
 
-        /* Special 3D Social Media Icons */
+        /* Enhanced 3D Social Media Icons with Wave Effects */
         .social-links {
             display: flex;
             justify-content: center;
-            gap: 25px;
-            margin-top: 20px;
+            gap: 30px;
+            margin: 30px 0;
             z-index: 2;
         }
 
         .social-link {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
+            text-decoration: none;
+        }
+
+        .social-icon {
+            position: relative;
             width: 60px;
             height: 60px;
             border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: #fff;
-            text-decoration: none;
-            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            position: relative;
+            font-size: 24px;
+            transition: all 0.3s ease;
             transform-style: preserve-3d;
             transform: perspective(500px);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            margin-bottom: 10px; /* Added BR after icon */
+            overflow: hidden;
         }
 
-        .social-link::before {
+        .social-icon::before {
             content: '';
             position: absolute;
             width: 100%;
@@ -303,7 +354,7 @@
             transition: all 0.3s ease;
         }
 
-        .social-link::after {
+        .social-icon::after {
             content: '';
             position: absolute;
             width: 100%;
@@ -314,56 +365,87 @@
             transition: all 0.3s ease;
         }
 
-        .social-link i {
+        .social-icon i {
             position: relative;
-            font-size: 24px;
             transition: all 0.3s ease;
             z-index: 2;
         }
 
-        .social-link:hover {
+        /* Wave Effect */
+        .wave {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: scale(0);
+            opacity: 0;
+            animation: wave 3s infinite;
+        }
+
+        @keyframes wave {
+            0% {
+                transform: scale(0);
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 0.2;
+            }
+            100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+
+        .social-icon:hover {
             transform: perspective(500px) rotateY(15deg) translateY(-10px) scale(1.1);
         }
 
-        .social-link:hover::before {
+        .social-icon:hover::before {
             transform: translateZ(-20px);
             background: rgba(255, 255, 255, 0.2);
         }
 
-        .social-link:hover::after {
+        .social-icon:hover::after {
             opacity: 0.6;
         }
 
-        .social-link:hover i {
+        .social-icon:hover i {
             transform: scale(1.2);
         }
 
-        .whatsapp-btn {
+        .whatsapp-icon {
             background: #25D366;
-            animation: pulse-whatsapp 2s infinite;
         }
 
-        .telegram-btn {
+        .telegram-icon {
             background: #0088cc;
-            animation: pulse-telegram 2s infinite 0.5s;
         }
 
-        @keyframes pulse-whatsapp {
-            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        .social-label {
+            color: #fff;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 5px;
+            opacity: 0.8;
+            transition: all 0.3s ease;
         }
 
-        @keyframes pulse-telegram {
-            0% { box-shadow: 0 0 0 0 rgba(0, 136, 204, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(0, 136, 204, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 136, 204, 0); }
+        .social-link:hover .social-label {
+            opacity: 1;
+            transform: translateY(3px);
         }
     </style>
 </head>
 <body>
-    <div class="floating-bubbles" id="bubbles"></div>
+    <!-- 3D Background Elements -->
+    <div class="bg-3d">
+        <div class="bg-grid"></div>
+    </div>
+    <div class="particles" id="particles"></div>
     
+    <!-- Contact Form -->
     <div class="contact-container" id="contactContainer">
         <div class="contact-card front">
             <h2>Contact Us</h2>
@@ -385,7 +467,7 @@
         </div>
         <div class="contact-card back">
             <h2>Thank You!</h2>
-            <div class="success-message">Your message has been sent to kskannancontact@gmail.com</div>
+            <div class="success-message">We'll get back to you soon</div>
             
             <div class="contact-info">
                 <a href="https://wa.me/9655636477" class="contact-item" target="_blank">
@@ -399,11 +481,19 @@
             </div>
             
             <div class="social-links">
-                <a href="https://wa.me/9655636477" class="social-link whatsapp-btn" title="WhatsApp" target="_blank">
-                    <i class="fab fa-whatsapp"></i>
+                <a href="https://wa.me/9655636477" class="social-link" target="_blank">
+                    <div class="social-icon whatsapp-icon">
+                        <i class="fab fa-whatsapp"></i>
+                        <div class="wave"></div>
+                    </div>
+                    <span class="social-label">WhatsApp</span>
                 </a>
-                <a href="https://telegram.me/ks_admin_68" class="social-link telegram-btn" title="Telegram" target="_blank">
-                    <i class="fab fa-telegram-plane"></i>
+                <a href="https://telegram.me/ks_admin_68" class="social-link" target="_blank">
+                    <div class="social-icon telegram-icon">
+                        <i class="fab fa-telegram-plane"></i>
+                        <div class="wave"></div>
+                    </div>
+                    <span class="social-label">Telegram</span>
                 </a>
             </div>
             
@@ -415,58 +505,32 @@
         const contactContainer = document.getElementById('contactContainer');
         const contactForm = document.getElementById('contactForm');
         const returnBtn = document.getElementById('returnBtn');
-        const bubblesContainer = document.getElementById('bubbles');
+        const particlesContainer = document.getElementById('particles');
         
-        // Create floating bubbles
-        function createBubbles() {
-            for (let i = 0; i < 50; i++) {
-                const bubble = document.createElement('div');
-                bubble.classList.add('bubble');
+        // Create floating particles
+        function createParticles() {
+            for (let i = 0; i < 100; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
                 
-                // Random size between 5px and 30px
-                const size = Math.random() * 25 + 5;
-                bubble.style.width = `${size}px`;
-                bubble.style.height = `${size}px`;
+                // Random size between 2px and 6px
+                const size = Math.random() * 4 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
                 
                 // Random position
-                bubble.style.left = `${Math.random() * 100}%`;
-                bubble.style.top = `${Math.random() * 100}%`;
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
                 
                 // Random animation duration and delay
                 const duration = Math.random() * 20 + 10;
                 const delay = Math.random() * 10;
-                bubble.style.animation = `float ${duration}s linear ${delay}s infinite`;
+                particle.style.animation = `float ${duration}s linear ${delay}s infinite`;
                 
                 // Random opacity
-                bubble.style.opacity = Math.random() * 0.5 + 0.1;
+                particle.style.opacity = Math.random() * 0.5;
                 
-                bubblesContainer.appendChild(bubble);
-            }
-        }
-        
-        // Create bubbles inside contact card
-        function createCardBubbles() {
-            const card = document.querySelector('.contact-card.front');
-            for (let i = 0; i < 15; i++) {
-                const bubble = document.createElement('div');
-                bubble.classList.add('bubble');
-                
-                // Smaller size for card bubbles
-                const size = Math.random() * 15 + 3;
-                bubble.style.width = `${size}px`;
-                bubble.style.height = `${size}px`;
-                
-                // Position within card
-                bubble.style.left = `${Math.random() * 80 + 10}%`;
-                bubble.style.top = `${Math.random() * 80 + 10}%`;
-                
-                // Animation
-                const duration = Math.random() * 15 + 5;
-                const delay = Math.random() * 5;
-                bubble.style.animation = `float ${duration}s linear ${delay}s infinite`;
-                bubble.style.opacity = Math.random() * 0.3 + 0.1;
-                
-                card.appendChild(bubble);
+                particlesContainer.appendChild(particle);
             }
         }
         
@@ -520,9 +584,8 @@
             }, 400);
         });
         
-        // Initialize bubbles
-        createBubbles();
-        createCardBubbles();
+        // Initialize particles
+        createParticles();
     </script>
 </body>
 </html>
