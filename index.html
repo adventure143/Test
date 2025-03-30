@@ -3,66 +3,502 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KS Agency ShareChat</title>
+    <title>3D Contact Form</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            font-family: sans-serif;
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        * {
             margin: 0;
             padding: 0;
-            overflow-y: scroll; /* Enable vertical scroll */
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
         }
-        .logo {
-            width: 100px;
-            height: 100px;
-            margin: 30px auto 0; /* Top margin of 30px and centered horizontally */
-            animation: jump 0.5s infinite alternate; /* Logo jumping animation */
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #0061ff, #60efff);
+            perspective: 1000px;
+            overflow: hidden;
         }
-        @keyframes jump {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-10px); }
+
+        .floating-bubbles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
         }
-        .title {
+
+        .bubble {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg) translateZ(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.5;
+            }
+            50% {
+                transform: translateY(-100px) rotate(180deg) translateZ(50px);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-200px) rotate(360deg) translateZ(0);
+                opacity: 0;
+            }
+        }
+        
+        .contact-container {
+            position: relative;
+            width: 400px;
+            height: 550px;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 10;
+        }
+        
+        .contact-card {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: all 0.5s ease;
+            overflow: hidden;
+        }
+
+        .contact-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            animation: bubbleBg 15s infinite linear;
+            z-index: -1;
+        }
+
+        @keyframes bubbleBg {
+            0% {
+                transform: translate(0, 0);
+            }
+            25% {
+                transform: translate(20px, 20px);
+            }
+            50% {
+                transform: translate(0, 40px);
+            }
+            75% {
+                transform: translate(-20px, 20px);
+            }
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+        
+        .contact-card.front {
+            transform: rotateY(0deg);
+        }
+        
+        .contact-card.back {
+            transform: rotateY(180deg);
+            justify-content: center;
+            align-items: center;
             text-align: center;
-            margin-top: 20px; /* Margin from logo */
         }
-        .title h1 {
-            font-size: 30px;
-            color: black; /* Auto color */
+        
+        h2 {
+            color: #fff;
+            font-size: 28px;
+            margin-bottom: 30px;
+            text-align: center;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-        .title h4, .title h5 {
+        
+        .input-group {
+            position: relative;
+            margin-bottom: 30px;
+            z-index: 2;
+        }
+        
+        .input-group input,
+        .input-group textarea {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            outline: none;
+            border-radius: 35px;
             font-size: 16px;
-            margin: 5px 0;
+            color: #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            z-index: 2;
+            position: relative;
         }
-        .button-container {
-            text-align: center;
-            margin-top: 20px; /* Margin from title */
+
+        .input-group input:focus,
+        .input-group textarea:focus {
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            transform: translateY(-3px);
         }
-        .button {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: blue;
-            color: white;
-            border: 2px solid black;
-            border-radius: 6px;
-            font-weight: bold;
+        
+        .input-group textarea {
+            resize: none;
+            min-height: 100px;
+        }
+        
+        .input-group label {
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            color: #fff;
+            font-size: 16px;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 1;
+        }
+        
+        .input-group input:focus ~ label,
+        .input-group input:valid ~ label,
+        .input-group textarea:focus ~ label,
+        .input-group textarea:valid ~ label {
+            transform: translateY(-30px);
+            font-size: 14px;
+            color: #fff;
+            background: linear-gradient(45deg, #0061ff, #60efff);
+            padding: 2px 10px;
+            border-radius: 20px;
+        }
+        
+        button {
+            width: 100%;
+            padding: 15px;
+            background: #fff;
+            border: none;
+            outline: none;
+            border-radius: 35px;
+            color: #0061ff;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            z-index: 2;
+        }
+        
+        button:hover {
+            background: #0061ff;
+            color: #fff;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .success-message {
+            color: #fff;
+            font-size: 18px;
+            margin-bottom: 30px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 2;
+        }
+        
+        .return-btn {
+            background: transparent;
+            border: 2px solid #fff;
+            color: #fff;
+            margin-bottom: 30px;
+        }
+        
+        .return-btn:hover {
+            background: #fff;
+            color: #0061ff;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            z-index: 2;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            color: #fff;
             text-decoration: none;
-            margin: 0 10px;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .contact-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        .contact-item i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            z-index: 2;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transform: perspective(500px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .social-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #0061ff, #60efff);
+            transform: translateZ(-1px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .social-link i {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            transform: translateY(-5px) scale(1.1) rotateY(15deg);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .social-link:hover::before {
+            opacity: 1;
+        }
+
+        .social-link:hover i {
+            transform: scale(1.2);
+        }
+
+        .telegram-btn {
+            background: #0088cc;
+        }
+
+        .whatsapp-btn {
+            background: #25D366;
+        }
+
+        .facebook-btn {
+            background: #3b5998;
+        }
+
+        .instagram-btn {
+            background: #E1306C;
+        }
+
+        .twitter-btn {
+            background: #1DA1F2;
         }
     </style>
 </head>
 <body>
-    <div class="logo">
-        <img src="https://i.postimg.cc/NG7ZfLZN/2-KS-Agency-Logo-Round-Cut.png" alt="KS Agency Logo" width="100" height="100">
+    <div class="floating-bubbles" id="bubbles"></div>
+    
+    <div class="contact-container" id="contactContainer">
+        <div class="contact-card front">
+            <h2>Contact Us</h2>
+            <form id="contactForm">
+                <div class="input-group">
+                    <input type="text" id="name" required>
+                    <label for="name">Your Name</label>
+                </div>
+                <div class="input-group">
+                    <input type="email" id="email" required>
+                    <label for="email">Your Email</label>
+                </div>
+                <div class="input-group">
+                    <textarea id="message" required></textarea>
+                    <label for="message">Your Message</label>
+                </div>
+                <button type="submit">Send Message</button>
+            </form>
+        </div>
+        <div class="contact-card back">
+            <h2>Thank You!</h2>
+            <div class="success-message">Your message has been sent successfully.</div>
+            
+            <div class="contact-info">
+                <a href="https://wa.me/9655636477" class="contact-item" target="_blank">
+                    <i class="fab fa-whatsapp"></i>
+                    <span>+91 9655636477</span>
+                </a>
+                <a href="https://telegram.me/ks_admin_68" class="contact-item" target="_blank">
+                    <i class="fab fa-telegram-plane"></i>
+                    <span>@ks_admin_68</span>
+                </a>
+            </div>
+            
+            <div class="social-links">
+                <a href="#" class="social-link whatsapp-btn" title="WhatsApp">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+                <a href="https://telegram.me/ks_admin_68" class="social-link telegram-btn" title="Telegram">
+                    <i class="fab fa-telegram-plane"></i>
+                </a>
+                <a href="#" class="social-link facebook-btn" title="Facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#" class="social-link instagram-btn" title="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="#" class="social-link twitter-btn" title="Twitter">
+                    <i class="fab fa-twitter"></i>
+                </a>
+            </div>
+            
+            <button class="return-btn" id="returnBtn">Back to Form</button>
+        </div>
     </div>
-    <div class="title">
-        <h1>KS Agency ShareChat</h1>
-        <h4>All Languages Gift Chatroom Available</h4>
-        <h5>All Languages FriendZone Available</h5>
-    </div>
-    <div class="button-container">
-        <a href="https://youtube.com/@KS-Agency-143?si=4UN0hSpkdiwB3sKM" class="button">KS Agency YouTube</a>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeEBBIwAwljWwHemxwv-mC2XEsiREpwER-RTxD0wbTk7_z0Gg/viewform?usp=sf_link" class="button">Apply Gift Box</a>
-        <a href="https://www.google.com" class="button">Google</a>
-    </div>
+
+    <script>
+        const contactContainer = document.getElementById('contactContainer');
+        const contactForm = document.getElementById('contactForm');
+        const returnBtn = document.getElementById('returnBtn');
+        const bubblesContainer = document.getElementById('bubbles');
+        
+        // Create floating bubbles
+        function createBubbles() {
+            for (let i = 0; i < 50; i++) {
+                const bubble = document.createElement('div');
+                bubble.classList.add('bubble');
+                
+                // Random size between 5px and 30px
+                const size = Math.random() * 25 + 5;
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
+                
+                // Random position
+                bubble.style.left = `${Math.random() * 100}%`;
+                bubble.style.top = `${Math.random() * 100}%`;
+                
+                // Random animation duration and delay
+                const duration = Math.random() * 20 + 10;
+                const delay = Math.random() * 10;
+                bubble.style.animation = `float ${duration}s linear ${delay}s infinite`;
+                
+                // Random opacity
+                bubble.style.opacity = Math.random() * 0.5 + 0.1;
+                
+                bubblesContainer.appendChild(bubble);
+            }
+        }
+        
+        // Create bubbles inside contact card
+        function createCardBubbles() {
+            const card = document.querySelector('.contact-card.front');
+            for (let i = 0; i < 15; i++) {
+                const bubble = document.createElement('div');
+                bubble.classList.add('bubble');
+                
+                // Smaller size for card bubbles
+                const size = Math.random() * 15 + 3;
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
+                
+                // Position within card
+                bubble.style.left = `${Math.random() * 80 + 10}%`;
+                bubble.style.top = `${Math.random() * 80 + 10}%`;
+                
+                // Animation
+                const duration = Math.random() * 15 + 5;
+                const delay = Math.random() * 5;
+                bubble.style.animation = `float ${duration}s linear ${delay}s infinite`;
+                bubble.style.opacity = Math.random() * 0.3 + 0.1;
+                
+                card.appendChild(bubble);
+            }
+        }
+        
+        // Mouse move 3D effect
+        document.addEventListener('mousemove', (e) => {
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+            contactContainer.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+        });
+        
+        // Reset position when mouse leaves
+        document.addEventListener('mouseleave', () => {
+            contactContainer.style.transform = 'rotateY(0deg) rotateX(0deg)';
+        });
+        
+        // Form submission with animation
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Add submission animation
+            contactContainer.style.transform = 'rotateY(90deg) scale(0.9)';
+            
+            setTimeout(() => {
+                contactContainer.style.transform = 'rotateY(180deg) scale(1)';
+            }, 400);
+        });
+        
+        // Return button with animation
+        returnBtn.addEventListener('click', () => {
+            contactContainer.style.transform = 'rotateY(90deg) scale(0.9)';
+            
+            setTimeout(() => {
+                contactContainer.style.transform = 'rotateY(0deg) scale(1)';
+                contactForm.reset();
+            }, 400);
+        });
+        
+        // Initialize bubbles
+        createBubbles();
+        createCardBubbles();
+    </script>
 </body>
 </html>
