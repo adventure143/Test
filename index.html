@@ -30,6 +30,7 @@
             background-color: #f9f9f9;
             color: var(--dark);
             line-height: 1.6;
+            padding: 5px;
         }
         
         .container {
@@ -40,18 +41,18 @@
             background-color: #f9f9f9;
         }
 
-        /* Animated Gradient Border ONLY around container */
+        /* 5px Straight Animated Gradient Border */
         .container::before {
             content: '';
             position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(90deg, #e74c3c, #3498db, #2ecc71, #f1c40f, #e74c3c);
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            background: linear-gradient(90deg, 
+                #e74c3c, #3498db, #2ecc71, #f1c40f, #e74c3c);
             background-size: 400% 400%;
             z-index: -1;
-            border-radius: 5px;
             animation: gradientBorder 8s linear infinite;
         }
 
@@ -64,14 +65,96 @@
             }
         }
 
-        /* ALL OTHER CSS REMAINS EXACTLY THE SAME */
-        /* ... (rest of your CSS remains unchanged) ... */
+        /* Header Styles */
+        header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .title-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        .agency-logo {
+            height: 60px;
+            margin-right: 8px;
+        }
+        
+        .agency-title {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-shadow: 
+                0 1px 0 #ccc,
+                0 2px 0 #bbb,
+                0 3px 0 #aaa,
+                0 4px 0 #999,
+                0 5px 0 #888,
+                0 6px 0 #777,
+                0 7px 0 #666,
+                0 8px 7px rgba(0,0,0,0.4),
+                0 8px 15px rgba(0,0,0,0.2);
+        }
+        
+        .anniversary-badge {
+            background: linear-gradient(135deg, #ff6b6b, #e74c3c);
+            color: white;
+            padding: 0.6rem 1.8rem;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 
+                0 5px 15px rgba(231, 76, 60, 0.4),
+                0 10px 30px rgba(231, 76, 60, 0.2),
+                inset 0 1px 1px rgba(255,255,255,0.3);
+            transform: rotate(-5deg);
+            animation: float 3s ease-in-out infinite;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 2px solid rgba(255,255,255,0.2);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        @keyframes float {
+            0% { transform: rotate(-5deg) translateY(0px); }
+            50% { transform: rotate(-5deg) translateY(-5px); }
+            100% { transform: rotate(-5deg) translateY(0px); }
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            max-width: 700px;
+            margin: 0 auto 1.5rem;
+            line-height: 1.8;
+        }
+        
+        /* Rest of your CSS remains unchanged */
+        /* ... (all other styles remain exactly as you specified) ... */
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- ALL YOUR EXISTING CONTENT REMAINS EXACTLY THE SAME -->
-        <!-- ... (rest of your HTML remains unchanged) ... -->
+        <!-- All your content remains exactly the same -->
+        <header>
+            <div class="title-container">
+                <img src="https://i.postimg.cc/Fzw41xPz/KS-Agency-Logo.png" alt="KS Agency Logo" class="agency-logo">
+                <h1 class="agency-title">KS Agency</h1>
+                <div class="anniversary-badge">1st Anniversary!</div>
+            </div>
+            <p class="subtitle">
+                Thank you for an amazing first year!<br>
+                Our top 3 ShareChat chatroom contributors win premium gifts!
+            </p>
+        </header>
+        
+        <!-- Rest of your HTML content -->
+        <!-- ... (all sections remain exactly as you specified) ... -->
     </div>
 </body>
 </html>
