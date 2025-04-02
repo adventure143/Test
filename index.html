@@ -30,45 +30,17 @@
             background-color: #f9f9f9;
             color: var(--dark);
             line-height: 1.6;
-            padding: 5px;
         }
         
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
-            position: relative;
-            background-color: #f9f9f9;
         }
-
-        /* 5px Straight Animated Gradient Border */
-        .container::before {
-            content: '';
-            position: absolute;
-            top: -5px;
-            left: -5px;
-            right: -5px;
-            bottom: -5px;
-            background: linear-gradient(90deg, 
-                #e74c3c, #3498db, #2ecc71, #f1c40f, #e74c3c);
-            background-size: 400% 400%;
-            z-index: -1;
-            animation: gradientBorder 8s linear infinite;
-        }
-
-        @keyframes gradientBorder {
-            0% {
-                background-position: 0% 50%;
-            }
-            100% {
-                background-position: 100% 50%;
-            }
-        }
-
-        /* Header Styles */
+        
         header {
             text-align: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
         }
         
         .title-container {
@@ -80,14 +52,17 @@
             margin: 1rem 0;
         }
 
+        /* ONLY ADDED THIS NEW LOGO-RELATED STYLE */
         .agency-logo {
             height: 60px;
-            margin-right: 8px;
+            margin-right: 15px;
         }
         
         .agency-title {
             font-size: 3rem;
             font-weight: 700;
+            position: relative;
+            display: inline-block;
             color: var(--primary);
             text-shadow: 
                 0 1px 0 #ccc,
@@ -114,33 +89,399 @@
                 inset 0 1px 1px rgba(255,255,255,0.3);
             transform: rotate(-5deg);
             animation: float 3s ease-in-out infinite;
+            position: relative;
+            z-index: 1;
             text-transform: uppercase;
             letter-spacing: 1px;
             border: 2px solid rgba(255,255,255,0.2);
             text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-
+        
+        .anniversary-badge::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0));
+            border-radius: 35px;
+            z-index: -1;
+            opacity: 0.7;
+        }
+        
+        .anniversary-badge::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0));
+            border-radius: 30px;
+            z-index: -1;
+        }
+        
         @keyframes float {
             0% { transform: rotate(-5deg) translateY(0px); }
             50% { transform: rotate(-5deg) translateY(-5px); }
             100% { transform: rotate(-5deg) translateY(0px); }
         }
         
+        @keyframes shine {
+            0% { background-position: -100px; }
+            100% { background-position: 200px; }
+        }
+        
         .subtitle {
             font-size: 1.2rem;
             color: #7f8c8d;
             max-width: 700px;
-            margin: 0 auto 1.5rem;
+            margin: 0 auto 2rem;
             line-height: 1.8;
         }
         
-        /* Rest of your CSS remains unchanged */
-        /* ... (all other styles remain exactly as you specified) ... */
+        .giveaway-section {
+            margin: 3rem 0;
+            text-align: center;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, var(--accent), var(--secondary));
+            border-radius: 3px;
+        }
+        
+        .prizes-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+        
+        .prize-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            width: 300px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border-top: 5px solid;
+        }
+        
+        .prize-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        
+        .prize-card.gold {
+            border-color: var(--gold);
+        }
+        
+        .prize-card.silver {
+            border-color: var(--silver);
+        }
+        
+        .prize-card.bronze {
+            border-color: var(--bronze);
+        }
+        
+        .prize-rank {
+            position: absolute;
+            top: -15px;
+            right: 20px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .prize-card.gold .prize-rank {
+            background: var(--gold);
+            color: white;
+        }
+        
+        .prize-card.silver .prize-rank {
+            background: var(--silver);
+            color: white;
+        }
+        
+        .prize-card.bronze .prize-rank {
+            background: var(--bronze);
+            color: white;
+        }
+        
+        .prize-image {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 1rem;
+            object-fit: contain;
+        }
+        
+        .prize-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .prize-desc {
+            color: #7f8c8d;
+            margin-bottom: 1rem;
+        }
+        
+        /* Time Period Container */
+        .time-period-container {
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            color: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 2rem auto;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .time-period-title {
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+            position: relative;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        .time-period-dates {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin: 1rem 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .time-period-note {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 0.8rem;
+            position: relative;
+            font-style: italic;
+        }
+        
+        /* Enhanced How to Win Section */
+        .winner-criteria {
+            background: white;
+            border-radius: 15px;
+            padding: 2.5rem;
+            margin: 4rem auto;
+            max-width: 800px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(52, 152, 219, 0.2);
+        }
+
+        .winner-criteria::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--accent), var(--secondary));
+        }
+
+        .criteria-title {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .criteria-title::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            width: 8px;
+            height: 100%;
+            background: var(--accent);
+            border-radius: 5px;
+        }
+
+        .criteria-steps {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .criteria-step {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+            padding: 1.5rem;
+            border-radius: 10px;
+            background: rgba(52, 152, 219, 0.05);
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .criteria-step:hover {
+            background: rgba(52, 152, 219, 0.1);
+            transform: translateX(5px);
+            border-left: 4px solid var(--accent);
+        }
+
+        .step-icon {
+            width: 50px;
+            height: 50px;
+            min-width: 50px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: var(--accent);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .step-desc {
+            color: #5a6a7a;
+            line-height: 1.6;
+        }
+        
+        .rules-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 3rem 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--accent);
+        }
+        
+        .rules-title {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .rules-title i {
+            color: var(--accent);
+        }
+        
+        .rules-list {
+            list-style-type: none;
+        }
+        
+        .rules-list li {
+            padding: 0.8rem 0;
+            border-bottom: 1px dashed #eee;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .rules-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .rules-list li i {
+            color: var(--accent);
+            margin-top: 3px;
+        }
+        
+        .social-media {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .social-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            background: transparent;
+        }
+        
+        .social-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            pointer-events: none;
+        }
+        
+        .social-icon:hover {
+            transform: scale(1.1);
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .prize-card {
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        .prize-card.silver {
+            animation-delay: 0.5s;
+        }
+        
+        .prize-card.bronze {
+            animation-delay: 1s;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- All your content remains exactly the same -->
         <header>
             <div class="title-container">
                 <img src="https://i.postimg.cc/Fzw41xPz/KS-Agency-Logo.png" alt="KS Agency Logo" class="agency-logo">
@@ -153,8 +494,124 @@
             </p>
         </header>
         
-        <!-- Rest of your HTML content -->
-        <!-- ... (all sections remain exactly as you specified) ... -->
+        <section class="giveaway-section">
+            <h2 class="section-title">Anniversary Giveaway Prizes</h2>
+            <p>Top 3 contributors with highest coins in our ShareChat chatroom will win these amazing prizes!</p>
+            
+            <div class="prizes-container">
+                <!-- 1st Prize -->
+                <div class="prize-card gold">
+                    <div class="prize-rank">1st</div>
+                    <img src="https://i.postimg.cc/90Pxc9TG/Boat-Airdopes-141.png" alt="Boat Airdopes 141" class="prize-image">
+                    <h3 class="prize-name">Boat Airdopes 141</h3>
+                    <p class="prize-desc">Premium wireless earbuds with 42hrs playback</p>
+                </div>
+                
+                <!-- 2nd Prize -->
+                <div class="prize-card silver">
+                    <div class="prize-rank">2nd</div>
+                    <img src="https://i.postimg.cc/pXLvpgtj/Boat-Airdopes-161.png" alt="Boat Airdopes 161" class="prize-image">
+                    <h3 class="prize-name">Boat Airdopes 161</h3>
+                    <p class="prize-desc">Wireless earbuds with 40hrs playback</p>
+                </div>
+                
+                <!-- 3rd Prize -->
+                <div class="prize-card bronze">
+                    <div class="prize-rank">3rd</div>
+                    <img src="https://i.postimg.cc/jSkSxRwC/Boat-Airdopes-131.png" alt="Boat Airdopes 131" class="prize-image">
+                    <h3 class="prize-name">Boat Airdopes 131</h3>
+                    <p class="prize-desc">Wireless earbuds with 60hrs playback</p>
+                </div>
+            </div>
+            
+            <div class="time-period-container">
+                <h3 class="time-period-title">Competition Period</h3>
+                <div class="time-period-dates">
+                    <span>April 1</span>
+                    <i class="fas fa-arrow-right"></i>
+                    <span>April 30, 2025</span>
+                </div>
+                <p class="time-period-note">Final coin counts will be calculated after April 30, 2025</p>
+            </div>
+            
+            <div class="winner-criteria">
+                <h2 class="criteria-title"><i class="fas fa-trophy"></i> How To Win</h2>
+                <div class="criteria-steps">
+                    <div class="criteria-step">
+                        <div class="step-icon">
+                            <i class="fas fa-medal"></i>
+                        </div>
+                        <div class="step-content">
+                            <h3 class="step-title">Earn Maximum Coins</h3>
+                            <p class="step-desc">Be the most active contributor in our ShareChat chatroom to accumulate the highest coins through regular participation.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="criteria-step">
+                        <div class="step-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="step-content">
+                            <h3 class="step-title">Maintain Until Deadline</h3>
+                            <p class="step-desc">Stay in the top 3 positions until the competition ends on [Anniversary Date].</p>
+                        </div>
+                    </div>
+                    
+                    <div class="criteria-step">
+                        <div class="step-icon">
+                            <i class="fas fa-bullhorn"></i>
+                        </div>
+                        <div class="step-content">
+                            <h3 class="step-title">Claim Your Prize</h3>
+                            <p class="step-desc">Winners will be announced in the group and must respond within 7 days to claim their prize.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="rules-section">
+            <h2 class="rules-title"><i class="fas fa-scroll"></i> Giveaway Rules</h2>
+            <ul class="rules-list">
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <span>Only active members of KS Agency ShareChat chatroom are eligible</span>
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <span>Top 3 members with highest coins at the end of anniversary date will win</span>
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <span>Coins must be earned through regular participation (no artificial boosting)</span>
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <span>Winners must provide valid shipping address within 7 days of announcement</span>
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <span>KS Agency admins' decision regarding winners will be final</span>
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <span>Prizes will be shipped within 15 days of winner confirmation</span>
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <span>Any attempt to manipulate results will lead to disqualification</span>
+                </li>
+            </ul>
+        </section>
+        
+        <div class="social-media">
+            <a href="https://t.me/ks_admin_68" class="social-icon" target="_blank" rel="noopener noreferrer">
+                <img src="https://i.postimg.cc/hvcJYxtN/Telegram-3-D-Logo.png" alt="Telegram">
+            </a>
+            <a href="https://wa.me/919655636477" class="social-icon" target="_blank" rel="noopener noreferrer">
+                <img src="https://i.postimg.cc/5N9YqwGC/Whats-App-3-D-Logo.png" alt="WhatsApp">
+            </a>
+        </div>
     </div>
 </body>
 </html>
