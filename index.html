@@ -3,615 +3,466 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KS Agency 1st Anniversary Giveaway</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>KS Agency Leaderboard</title>
     <style>
-        :root {
-            --primary: #2c3e50;
-            --secondary: #3498db;
-            --accent: #e74c3c;
-            --light: #ecf0f1;
-            --dark: #2c3e50;
-            --gold: #FFD700;
-            --silver: #C0C0C0;
-            --bronze: #CD7F32;
-        }
-        
-        * {
+        /* Modern font stack */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, 
+                         Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
+            background: #f5f7fa;
+            color: #2d3748;
+            line-height: 1.5;
         }
-        
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f9f9f9;
-            color: var(--dark);
-            line-height: 1.6;
-        }
-        
-        .container {
+
+        .dashboard {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem;
-        }
-        
-        header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        
-        .title-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin: 1rem 0;
+            padding: 24px;
         }
 
-        /* ONLY ADDED THIS NEW LOGO-RELATED STYLE */
-        .agency-logo {
-            height: 60px;
-            margin-right: 15px;
+        .leaderboard-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
         }
-        
-        .agency-title {
-            font-size: 3rem;
-            font-weight: 700;
-            position: relative;
-            display: inline-block;
-            color: var(--primary);
-            text-shadow: 
-                0 1px 0 #ccc,
-                0 2px 0 #bbb,
-                0 3px 0 #aaa,
-                0 4px 0 #999,
-                0 5px 0 #888,
-                0 6px 0 #777,
-                0 7px 0 #666,
-                0 8px 7px rgba(0,0,0,0.4),
-                0 8px 15px rgba(0,0,0,0.2);
+
+        .card-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #edf2f7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        
-        .anniversary-badge {
-            background: linear-gradient(135deg, #ff6b6b, #e74c3c);
+
+        .card-title {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1a202c;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .refresh-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-refresh {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            background: #4299e1;
             color: white;
-            padding: 0.6rem 1.8rem;
-            border-radius: 30px;
-            font-weight: 700;
-            font-size: 1.1rem;
-            box-shadow: 
-                0 5px 15px rgba(231, 76, 60, 0.4),
-                0 10px 30px rgba(231, 76, 60, 0.2),
-                inset 0 1px 1px rgba(255,255,255,0.3);
-            transform: rotate(-5deg);
-            animation: float 3s ease-in-out infinite;
-            position: relative;
-            z-index: 1;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border: 2px solid rgba(255,255,255,0.2);
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
         }
-        
-        .anniversary-badge::before {
-            content: '';
-            position: absolute;
-            top: -5px;
-            left: -5px;
-            right: -5px;
-            bottom: -5px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0));
-            border-radius: 35px;
-            z-index: -1;
-            opacity: 0.7;
+
+        .btn-refresh:hover {
+            background: #3182ce;
+            transform: translateY(-1px);
         }
-        
-        .anniversary-badge::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
+
+        .btn-refresh:active {
+            transform: translateY(0);
+        }
+
+        .last-updated {
+            font-size: 0.875rem;
+            color: #718096;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .data-table {
             width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0));
-            border-radius: 30px;
-            z-index: -1;
+            border-collapse: collapse;
+            min-width: 800px;
         }
-        
-        @keyframes float {
-            0% { transform: rotate(-5deg) translateY(0px); }
-            50% { transform: rotate(-5deg) translateY(-5px); }
-            100% { transform: rotate(-5deg) translateY(0px); }
-        }
-        
-        @keyframes shine {
-            0% { background-position: -100px; }
-            100% { background-position: 200px; }
-        }
-        
-        .subtitle {
-            font-size: 1.2rem;
-            color: #7f8c8d;
-            max-width: 700px;
-            margin: 0 auto 2rem;
-            line-height: 1.8;
-        }
-        
-        .giveaway-section {
-            margin: 3rem 0;
-            text-align: center;
-        }
-        
-        .section-title {
-            font-size: 2rem;
-            margin-bottom: 2rem;
-            color: var(--primary);
-            position: relative;
-            display: inline-block;
-        }
-        
-        .section-title::after {
-            content: "";
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(to right, var(--accent), var(--secondary));
-            border-radius: 3px;
-        }
-        
-        .prizes-container {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-            margin-top: 2rem;
-        }
-        
-        .prize-card {
-            background: white;
-            border-radius: 15px;
-            padding: 2rem;
-            width: 300px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            border-top: 5px solid;
-        }
-        
-        .prize-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-        }
-        
-        .prize-card.gold {
-            border-color: var(--gold);
-        }
-        
-        .prize-card.silver {
-            border-color: var(--silver);
-        }
-        
-        .prize-card.bronze {
-            border-color: var(--bronze);
-        }
-        
-        .prize-rank {
-            position: absolute;
-            top: -15px;
-            right: 20px;
-            font-size: 1.5rem;
-            font-weight: bold;
-            background: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .prize-card.gold .prize-rank {
-            background: var(--gold);
-            color: white;
-        }
-        
-        .prize-card.silver .prize-rank {
-            background: var(--silver);
-            color: white;
-        }
-        
-        .prize-card.bronze .prize-rank {
-            background: var(--bronze);
-            color: white;
-        }
-        
-        .prize-image {
-            width: 150px;
-            height: 150px;
-            margin: 0 auto 1rem;
-            object-fit: contain;
-        }
-        
-        .prize-name {
-            font-size: 1.5rem;
+
+        .data-table th {
+            background: #f8fafc;
+            padding: 16px 20px;
+            text-align: left;
             font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-        
-        .prize-desc {
-            color: #7f8c8d;
-            margin-bottom: 1rem;
-        }
-        
-        /* Time Period Container */
-        .time-period-container {
-            background: linear-gradient(135deg, #3498db, #2c3e50);
-            color: white;
-            border-radius: 15px;
-            padding: 1.5rem;
-            margin: 2rem auto;
-            max-width: 500px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            position: relative;
-            overflow: hidden;
-            border: 2px solid rgba(255,255,255,0.1);
-        }
-
-        .time-period-title {
-            font-size: 1.4rem;
-            margin-bottom: 0.8rem;
-            position: relative;
-            display: inline-block;
-            font-weight: 600;
-        }
-
-        .time-period-dates {
-            font-size: 1.6rem;
-            font-weight: 600;
-            margin: 1rem 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .time-period-note {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            margin-top: 0.8rem;
-            position: relative;
-            font-style: italic;
-        }
-        
-        /* Enhanced How to Win Section */
-        .winner-criteria {
-            background: white;
-            border-radius: 15px;
-            padding: 2.5rem;
-            margin: 4rem auto;
-            max-width: 800px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(52, 152, 219, 0.2);
-        }
-
-        .winner-criteria::before {
-            content: "";
-            position: absolute;
+            color: #4a5568;
+            border-bottom: 2px solid #e2e8f0;
+            position: sticky;
             top: 0;
-            left: 0;
-            width: 5px;
-            height: 100%;
-            background: linear-gradient(to bottom, var(--accent), var(--secondary));
+            white-space: nowrap;
         }
 
-        .criteria-title {
-            font-size: 1.8rem;
-            margin-bottom: 2rem;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            position: relative;
-            padding-left: 20px;
+        .data-table td {
+            padding: 14px 20px;
+            border-bottom: 1px solid #edf2f7;
+            vertical-align: middle;
         }
 
-        .criteria-title::before {
-            content: "";
-            position: absolute;
-            left: 0;
-            width: 8px;
-            height: 100%;
-            background: var(--accent);
-            border-radius: 5px;
-        }
-
-        .criteria-steps {
-            display: grid;
-            gap: 1.5rem;
-        }
-
-        .criteria-step {
-            display: flex;
-            gap: 1.5rem;
-            align-items: flex-start;
-            padding: 1.5rem;
-            border-radius: 10px;
-            background: rgba(52, 152, 219, 0.05);
-            transition: all 0.3s ease;
-            border-left: 4px solid transparent;
-        }
-
-        .criteria-step:hover {
-            background: rgba(52, 152, 219, 0.1);
-            transform: translateX(5px);
-            border-left: 4px solid var(--accent);
-        }
-
-        .step-icon {
-            width: 50px;
-            height: 50px;
-            min-width: 50px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            color: var(--accent);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .step-content {
-            flex: 1;
-        }
-
-        .step-title {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--primary);
-            font-size: 1.1rem;
-        }
-
-        .step-desc {
-            color: #5a6a7a;
-            line-height: 1.6;
-        }
-        
-        .rules-section {
-            background: white;
-            border-radius: 15px;
-            padding: 2rem;
-            margin: 3rem 0;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-            border-left: 5px solid var(--accent);
-        }
-        
-        .rules-title {
-            font-size: 1.8rem;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .rules-title i {
-            color: var(--accent);
-        }
-        
-        .rules-list {
-            list-style-type: none;
-        }
-        
-        .rules-list li {
-            padding: 0.8rem 0;
-            border-bottom: 1px dashed #eee;
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-        }
-        
-        .rules-list li:last-child {
+        .data-table tr:last-child td {
             border-bottom: none;
         }
-        
-        .rules-list li i {
-            color: var(--accent);
-            margin-top: 3px;
+
+        .data-table tr:hover td {
+            background-color: #f8fafc;
         }
-        
-        .social-media {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-        
-        .social-icon {
+
+        /* Rank styling */
+        .rank-cell {
+            font-weight: 600;
+            text-align: center;
             width: 60px;
-            height: 60px;
+        }
+
+        .rank-1 { color: #d69e2e; }
+        .rank-2 { color: #a0aec0; }
+        .rank-3 { color: #ed8936; }
+
+        /* Loading states */
+        .loading-container {
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(66, 153, 225, 0.2);
             border-radius: 50%;
+            border-top-color: #4299e1;
+            animation: spin 1s linear infinite;
+            margin-bottom: 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Auto-refresh toggle */
+        .auto-refresh-toggle {
             display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 8px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
             cursor: pointer;
-            transition: transform 0.3s ease;
-            background: transparent;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
         }
-        
-        .social-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            pointer-events: none;
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
         }
-        
-        .social-icon:hover {
-            transform: scale(1.1);
+
+        input:checked + .toggle-slider {
+            background-color: #4299e1;
         }
-        
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
         }
-        
-        .prize-card {
-            animation: float 4s ease-in-out infinite;
-        }
-        
-        .prize-card.silver {
-            animation-delay: 0.5s;
-        }
-        
-        .prize-card.bronze {
-            animation-delay: 1s;
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+                padding: 16px;
+            }
+            
+            .refresh-controls {
+                width: 100%;
+                justify-content: space-between;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="title-container">
-                <img src="https://i.postimg.cc/Fzw41xPz/KS-Agency-Logo.png" alt="KS Agency Logo" class="agency-logo">
-                <h1 class="agency-title">KS Agency</h1>
-                <div class="anniversary-badge">1st Anniversary!</div>
-            </div>
-            <p class="subtitle">
-                Thank you for an amazing first year!<br>
-                Our top 3 ShareChat chatroom contributors win premium gifts!
-            </p>
-        </header>
-        
-        <section class="giveaway-section">
-            <h2 class="section-title">Anniversary Giveaway Prizes</h2>
-            <p>Top 3 contributors with highest coins in our ShareChat chatroom will win these amazing prizes!</p>
-            
-            <div class="prizes-container">
-                <!-- 1st Prize -->
-                <div class="prize-card gold">
-                    <div class="prize-rank">1st</div>
-                    <img src="https://i.postimg.cc/90Pxc9TG/Boat-Airdopes-141.png" alt="Boat Airdopes 141" class="prize-image">
-                    <h3 class="prize-name">Boat Airdopes 141</h3>
-                    <p class="prize-desc">Premium wireless earbuds with 42hrs playback</p>
-                </div>
-                
-                <!-- 2nd Prize -->
-                <div class="prize-card silver">
-                    <div class="prize-rank">2nd</div>
-                    <img src="https://i.postimg.cc/pXLvpgtj/Boat-Airdopes-161.png" alt="Boat Airdopes 161" class="prize-image">
-                    <h3 class="prize-name">Boat Airdopes 161</h3>
-                    <p class="prize-desc">Wireless earbuds with 40hrs playback</p>
-                </div>
-                
-                <!-- 3rd Prize -->
-                <div class="prize-card bronze">
-                    <div class="prize-rank">3rd</div>
-                    <img src="https://i.postimg.cc/jSkSxRwC/Boat-Airdopes-131.png" alt="Boat Airdopes 131" class="prize-image">
-                    <h3 class="prize-name">Boat Airdopes 131</h3>
-                    <p class="prize-desc">Wireless earbuds with 60hrs playback</p>
-                </div>
-            </div>
-            
-            <div class="time-period-container">
-                <h3 class="time-period-title">Competition Period</h3>
-                <div class="time-period-dates">
-                    <span>April 1</span>
-                    <i class="fas fa-arrow-right"></i>
-                    <span>April 30</span>
-                </div>
-                <p class="time-period-note">Final coin counts will be calculated after April 30, 2025</p>
-            </div>
-            
-            <div class="winner-criteria">
-                <h2 class="criteria-title"><i class="fas fa-trophy"></i> How To Win</h2>
-                <div class="criteria-steps">
-                    <div class="criteria-step">
-                        <div class="step-icon">
-                            <i class="fas fa-medal"></i>
-                        </div>
-                        <div class="step-content">
-                            <h3 class="step-title">Earn Maximum Coins</h3>
-                            <p class="step-desc">Be the most active contributor in our ShareChat chatroom to accumulate the highest coins through regular participation.</p>
-                        </div>
+    <div class="dashboard">
+        <div class="leaderboard-card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19 5H5C3.89543 5 3 5.89543 3 7V17C3 18.1046 3.89543 19 5 19H19C20.1046 19 21 18.1046 21 17V7C21 5.89543 20.1046 5 19 5Z" stroke="#4299e1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M16 3V7" stroke="#4299e1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M8 3V7" stroke="#4299e1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M3 11H21" stroke="#4299e1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M10 15H7V18H10V15Z" stroke="#4299e1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    KS Agency Leaderboard
+                </h2>
+                <div class="refresh-controls">
+                    <div class="auto-refresh-toggle">
+                        <span style="font-size: 0.875rem;">Auto-refresh</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="autoRefreshToggle">
+                            <span class="toggle-slider"></span>
+                        </label>
                     </div>
-                    
-                    <div class="criteria-step">
-                        <div class="step-icon">
-                            <i class="fas fa-calendar-check"></i>
-                        </div>
-                        <div class="step-content">
-                            <h3 class="step-title">Maintain Until Deadline</h3>
-                            <p class="step-desc">Stay in the top 3 positions until the competition ends on [Anniversary Date].</p>
-                        </div>
-                    </div>
-                    
-                    <div class="criteria-step">
-                        <div class="step-icon">
-                            <i class="fas fa-bullhorn"></i>
-                        </div>
-                        <div class="step-content">
-                            <h3 class="step-title">Claim Your Prize</h3>
-                            <p class="step-desc">Winners will be announced in the group and must respond within 7 days to claim their prize.</p>
-                        </div>
+                    <button class="btn-refresh" id="manualRefresh">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M23 4V10H17" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M1 20V14H7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M3.51 9C4.01717 7.56678 4.87913 6.2854 6.01547 5.27542C7.1518 4.26543 8.52547 3.55976 10 3.22C11.4745 2.88024 13.0086 2.91591 14.4635 3.3229C15.9184 3.7299 17.2463 4.49508 18.32 5.54L23 10M1 14L5.68 18.46C6.75374 19.5049 8.0816 20.2701 9.53651 20.6771C10.9914 21.0841 12.5255 21.1198 14 20.78C15.4745 20.4402 16.8482 19.7346 17.9845 18.7246C19.1209 17.7146 19.9828 16.4332 20.49 15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Refresh
+                    </button>
+                    <div class="last-updated" id="lastUpdated">
+                        Loading...
                     </div>
                 </div>
             </div>
-        </section>
-        
-        <section class="rules-section">
-            <h2 class="rules-title"><i class="fas fa-scroll"></i> Giveaway Rules</h2>
-            <ul class="rules-list">
-                <li>
-                    <i class="fas fa-check-circle"></i>
-                    <span>Only active members of KS Agency ShareChat chatroom are eligible</span>
-                </li>
-                <li>
-                    <i class="fas fa-check-circle"></i>
-                    <span>Top 3 members with highest coins at the end of anniversary date will win</span>
-                </li>
-                <li>
-                    <i class="fas fa-check-circle"></i>
-                    <span>Coins must be earned through regular participation (no artificial boosting)</span>
-                </li>
-                <li>
-                    <i class="fas fa-check-circle"></i>
-                    <span>Winners must provide valid shipping address within 7 days of announcement</span>
-                </li>
-                <li>
-                    <i class="fas fa-check-circle"></i>
-                    <span>KS Agency admins' decision regarding winners will be final</span>
-                </li>
-                <li>
-                    <i class="fas fa-check-circle"></i>
-                    <span>Prizes will be shipped within 15 days of winner confirmation</span>
-                </li>
-                <li>
-                    <i class="fas fa-check-circle"></i>
-                    <span>Any attempt to manipulate results will lead to disqualification</span>
-                </li>
-            </ul>
-        </section>
-        
-        <div class="social-media">
-            <a href="https://t.me/ks_admin_68" class="social-icon" target="_blank" rel="noopener noreferrer">
-                <img src="https://i.postimg.cc/hvcJYxtN/Telegram-3-D-Logo.png" alt="Telegram">
-            </a>
-            <a href="https://wa.me/919655636477" class="social-icon" target="_blank" rel="noopener noreferrer">
-                <img src="https://i.postimg.cc/5N9YqwGC/Whats-App-3-D-Logo.png" alt="WhatsApp">
-            </a>
+            
+            <div class="table-container">
+                <div id="data-display">
+                    <div class="loading-container">
+                        <div class="spinner"></div>
+                        <p>Loading leaderboard data...</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
+    <script>
+        // Configuration
+        const config = {
+            sheetId: '2PACX-1vQD6Ik8os0qqDlexu6mg_xFX31HLgpJe_OTfM1EnXl_va92j2WU830M1WrnjG7g0g',
+            autoRefreshInterval: 30000, // 30 seconds
+            manualRefreshDebounce: 2000 // 2 seconds
+        };
+
+        // State
+        let refreshInterval;
+        let lastRefreshTime = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize
+            loadLeaderboard();
+            
+            // Set up event listeners
+            document.getElementById('manualRefresh').addEventListener('click', debounceRefresh);
+            document.getElementById('autoRefreshToggle').addEventListener('change', toggleAutoRefresh);
+        });
+
+        function loadLeaderboard() {
+            const url = `https://docs.google.com/spreadsheets/d/e/${config.sheetId}/pub?output=csv`;
+            
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.text();
+                })
+                .then(csvData => {
+                    const rows = parseCSV(csvData);
+                    renderData(rows);
+                    updateLastUpdated();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showError();
+                    updateLastUpdated(false);
+                });
+        }
+
+        function parseCSV(text) {
+            const rows = [];
+            let row = [];
+            let cell = '';
+            let inQuotes = false;
+            
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                const nextChar = text[i+1];
+                
+                if (char === '"') {
+                    if (inQuotes && nextChar === '"') {
+                        cell += '"';
+                        i++;
+                    } else {
+                        inQuotes = !inQuotes;
+                    }
+                } else if (char === ',' && !inQuotes) {
+                    row.push(cell);
+                    cell = '';
+                } else if (char === '\n' && !inQuotes) {
+                    row.push(cell);
+                    rows.push(row);
+                    row = [];
+                    cell = '';
+                } else {
+                    cell += char;
+                }
+            }
+            
+            // Add last row if exists
+            if (cell || row.length) {
+                row.push(cell);
+                rows.push(row);
+            }
+            
+            return rows;
+        }
+
+        function renderData(rows) {
+            const container = document.getElementById('data-display');
+            
+            if (!rows || rows.length === 0) {
+                container.innerHTML = `
+                    <div class="loading-container">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 8V12L15 15M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#718096" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <p>No data available</p>
+                    </div>`;
+                return;
+            }
+            
+            const table = document.createElement('table');
+            table.className = 'data-table';
+            
+            // Create header
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+            
+            if (rows[0]) {
+                rows[0].forEach((header, index) => {
+                    const th = document.createElement('th');
+                    th.textContent = header;
+                    if (index === 0) th.style.width = '80px';
+                    headerRow.appendChild(th);
+                });
+                thead.appendChild(headerRow);
+                table.appendChild(thead);
+            }
+            
+            // Create body
+            const tbody = document.createElement('tbody');
+            
+            for (let i = 1; i < rows.length; i++) {
+                const tr = document.createElement('tr');
+                
+                rows[i].forEach((cell, j) => {
+                    const td = document.createElement('td');
+                    let textContent = cell.trim();
+                    
+                    td.textContent = textContent || '-';
+                    
+                    if (j === 0 && !isNaN(textContent)) {
+                        td.classList.add('rank-cell');
+                        if (textContent === '1') td.classList.add('rank-1');
+                        else if (textContent === '2') td.classList.add('rank-2');
+                        else if (textContent === '3') td.classList.add('rank-3');
+                    }
+                    
+                    tr.appendChild(td);
+                });
+                
+                tbody.appendChild(tr);
+            }
+            
+            table.appendChild(tbody);
+            container.innerHTML = '';
+            container.appendChild(table);
+        }
+
+        function showError() {
+            const container = document.getElementById('data-display');
+            container.innerHTML = `
+                <div class="loading-container" style="color: #e53e3e;">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 8V12M12 16H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <p>Failed to load data</p>
+                    <button class="btn-refresh" onclick="window.location.reload()" style="margin-top: 12px;">
+                        Try Again
+                    </button>
+                </div>`;
+        }
+
+        function updateLastUpdated(success = true) {
+            lastRefreshTime = new Date();
+            const el = document.getElementById('lastUpdated');
+            const timeString = lastRefreshTime.toLocaleTimeString();
+            
+            if (success) {
+                el.innerHTML = `Last updated: <strong>${timeString}</strong>`;
+            } else {
+                el.innerHTML = `Last attempt: <strong style="color:#e53e3e;">${timeString} (failed)</strong>`;
+            }
+        }
+
+        function debounceRefresh() {
+            const btn = document.getElementById('manualRefresh');
+            btn.disabled = true;
+            
+            loadLeaderboard();
+            
+            setTimeout(() => {
+                btn.disabled = false;
+            }, config.manualRefreshDebounce);
+        }
+
+        function toggleAutoRefresh(e) {
+            if (e.target.checked) {
+                startAutoRefresh();
+            } else {
+                stopAutoRefresh();
+            }
+        }
+
+        function startAutoRefresh() {
+            stopAutoRefresh(); // Clear any existing interval
+            refreshInterval = setInterval(loadLeaderboard, config.autoRefreshInterval);
+        }
+
+        function stopAutoRefresh() {
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+                refreshInterval = null;
+            }
+        }
+    </script>
 </body>
 </html>
