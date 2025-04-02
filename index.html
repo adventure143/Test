@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KS Agency 1st Anniversary Giveaway</title>
+    <title>KS Agency 1st Anniversary</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -38,16 +38,39 @@
             padding: 2rem;
         }
         
+        /* Logo Styles */
+        .logo-container {
+            text-align: center;
+            margin-bottom: 3px; /* Reduced bottom space */
+        }
+        
+        .agency-logo {
+            height: 70px;
+            width: auto;
+            transition: transform 0.3s ease;
+        }
+        
+        .agency-logo:hover {
+            transform: scale(1.05);
+        }
+        
         header {
             text-align: center;
             margin-bottom: 2rem;
-            position: relative;
+        }
+        
+        .title-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 1rem 0;
         }
         
         .agency-title {
-            font-size: 3rem; /* Changed from 3.5rem to 3rem */
+            font-size: 3rem;
             font-weight: 700;
-            margin: 1rem 0;
             position: relative;
             display: inline-block;
             color: var(--primary);
@@ -59,30 +82,34 @@
                 0 5px 0 #888,
                 0 6px 0 #777,
                 0 7px 0 #666,
-                0 8px 7px rgba(0,0,0,0.4),
                 0 8px 15px rgba(0,0,0,0.2);
         }
         
+        /* Straight Anniversary Badge */
         .anniversary-badge {
-            position: absolute;
-            top: -10px;
-            right: 20px;
-            background: var(--accent);
+            background: linear-gradient(135deg, #ff6b6b, #e74c3c);
             color: white;
-            padding: 0.5rem 1.5rem;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
-            transform: rotate(15deg);
-            z-index: 10;
-            animation: pulse 2s infinite;
+            padding: 0.6rem 1.8rem;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 
+                0 5px 15px rgba(231, 76, 60, 0.4),
+                0 10px 30px rgba(231, 76, 60, 0.2),
+                inset 0 1px 1px rgba(255,255,255,0.3);
+            animation: subtle-float 3s ease-in-out infinite;
+            position: relative;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 2px solid rgba(255,255,255,0.2);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-        
-        @keyframes pulse {
-            0% { transform: rotate(15deg) scale(1); }
-            50% { transform: rotate(15deg) scale(1.05); }
-            100% { transform: rotate(15deg) scale(1); }
+
+        @keyframes subtle-float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0px); }
         }
         
         .subtitle {
@@ -135,6 +162,7 @@
             position: relative;
             overflow: hidden;
             border-top: 5px solid;
+            animation: float 4s ease-in-out infinite;
         }
         
         .prize-card:hover {
@@ -148,10 +176,18 @@
         
         .prize-card.silver {
             border-color: var(--silver);
+            animation-delay: 0.5s;
         }
         
         .prize-card.bronze {
             border-color: var(--bronze);
+            animation-delay: 1s;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
         }
         
         .prize-rank {
@@ -203,7 +239,48 @@
             margin-bottom: 1rem;
         }
         
-        /* Enhanced How to Win Section */
+        /* Time Period Container */
+        .time-period-container {
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            color: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 2rem auto;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+        
+        .time-period-title {
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+            position: relative;
+            display: inline-block;
+            font-weight: 600;
+        }
+        
+        .time-period-dates {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin: 1rem 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .time-period-note {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 0.8rem;
+            position: relative;
+            font-style: italic;
+        }
+        
+        /* How to Win Section */
         .winner-criteria {
             background: white;
             border-radius: 15px;
@@ -299,6 +376,7 @@
             line-height: 1.6;
         }
         
+        /* Rules Section */
         .rules-section {
             background: white;
             border-radius: 15px;
@@ -342,6 +420,7 @@
             margin-top: 3px;
         }
         
+        /* Social Media */
         .social-media {
             display: flex;
             justify-content: center;
@@ -371,31 +450,23 @@
         .social-icon:hover {
             transform: scale(1.1);
         }
-        
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
-        
-        .prize-card {
-            animation: float 4s ease-in-out infinite;
-        }
-        
-        .prize-card.silver {
-            animation-delay: 0.5s;
-        }
-        
-        .prize-card.bronze {
-            animation-delay: 1s;
-        }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Logo with reduced bottom space and title attribute -->
+        <div class="logo-container">
+            <img src="https://i.postimg.cc/Fzw41xPz/KS-Agency-Logo.png" 
+                 alt="KS Agency Logo" 
+                 class="agency-logo"
+                 title="KS Agency Logo">
+        </div>
+        
         <header>
-            <div class="anniversary-badge">1st Anniversary!</div>
-            <h1 class="agency-title">KS Agency</h1>
+            <div class="title-container">
+                <h1 class="agency-title">KS Agency</h1>
+                <div class="anniversary-badge">1st Anniversary!</div>
+            </div>
             <p class="subtitle">
                 Thank you for an amazing first year!<br>
                 Our top 3 ShareChat chatroom contributors win premium gifts!
@@ -432,6 +503,16 @@
                 </div>
             </div>
             
+            <div class="time-period-container">
+                <h3 class="time-period-title">Competition Period</h3>
+                <div class="time-period-dates">
+                    <span>April 1</span>
+                    <i class="fas fa-arrow-right"></i>
+                    <span>April 30, 2025</span>
+                </div>
+                <p class="time-period-note">Final coin counts will be calculated after April 30, 2025</p>
+            </div>
+            
             <div class="winner-criteria">
                 <h2 class="criteria-title"><i class="fas fa-trophy"></i> How To Win</h2>
                 <div class="criteria-steps">
@@ -451,7 +532,7 @@
                         </div>
                         <div class="step-content">
                             <h3 class="step-title">Maintain Until Deadline</h3>
-                            <p class="step-desc">Stay in the top 3 positions until the competition ends on [Anniversary Date].</p>
+                            <p class="step-desc">Stay in the top 3 positions until the competition ends on April 30, 2025. Winners will be determined based on final coin counts calculated after this date.</p>
                         </div>
                     </div>
                     
